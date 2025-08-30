@@ -411,7 +411,6 @@ contract GroupTreasury is ReentrancyGuard, Ownable, Pausable {
 
         members[_member].active = false;
 
-        // Remove from member list efficiently
         for (uint i = 0; i < memberList.length; i++) {
             if (memberList[i] == _member) {
                 memberList[i] = memberList[memberList.length - 1];
