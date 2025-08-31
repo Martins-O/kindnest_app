@@ -2,7 +2,7 @@
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useWatchContractEvent } from 'wagmi';
 import { useEffect, useState } from 'react';
-import { CONTRACTS, EXPENSE_FACTORY_ABI, GROUP_TREASURY_ABI } from './contracts';
+import { CONTRACTS } from './contracts';
 import { shortenAddress } from './utils';
 import { groupSync } from './groupSync';
 import type { GroupInfo, Expense, Member } from '@/types';
@@ -16,8 +16,8 @@ export function useCreateGroup() {
 
   const createGroup = (name: string, creatorNickname: string) => {
     writeContract({
-      address: CONTRACTS.EXPENSE_FACTORY,
-      abi: EXPENSE_FACTORY_ABI,
+      address: CONTRACTS.careCircleFactory.address,
+      abi: CONTRACTS.careCircleFactory.abi,
       functionName: 'createGroup',
       args: [name, creatorNickname],
     } as any);
@@ -34,8 +34,8 @@ export function useCreateGroup() {
 
 export function useUserGroups(userAddress?: string) {
   const result = useReadContract({
-    address: CONTRACTS.EXPENSE_FACTORY,
-    abi: EXPENSE_FACTORY_ABI,
+    address: CONTRACTS.careCircleFactory.address,
+    abi: CONTRACTS.careCircleFactory.abi,
     functionName: 'getUserGroups',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
@@ -67,15 +67,15 @@ export function useUserGroupsWithEventListener(userAddress?: string) {
 
   // Listen for GroupCreated events - new groups might mean this user was added
   useWatchContractEvent({
-    address: CONTRACTS.EXPENSE_FACTORY,
-    abi: EXPENSE_FACTORY_ABI,
+    address: CONTRACTS.careCircleFactory.address,
+    abi: CONTRACTS.careCircleFactory.abi,
     eventName: 'GroupCreated',
     enabled: !!userAddress,
     onLogs(logs) {
-      console.log('📡 New group created, checking for membership changes:', logs);
+      // New group created, checking for membership changes
       // Refetch after a short delay to allow blockchain state to sync
       setTimeout(() => {
-        console.log('🔄 Auto-refetching user groups after GroupCreated event');
+        // Auto-refetching user groups after GroupCreated event
         refetch();
       }, 3000);
     },
@@ -86,8 +86,8 @@ export function useUserGroupsWithEventListener(userAddress?: string) {
 
 export function useGroupInfo(groupAddress?: string) {
   return useReadContract({
-    address: CONTRACTS.EXPENSE_FACTORY,
-    abi: EXPENSE_FACTORY_ABI,
+    address: CONTRACTS.careCircleFactory.address,
+    abi: CONTRACTS.careCircleFactory.abi,
     functionName: 'getGroupInfo',
     args: groupAddress ? [groupAddress as `0x${string}`] : undefined,
     query: {
@@ -103,7 +103,7 @@ export function useGroupInfo(groupAddress?: string) {
 export function useGroupExpenses(groupAddress?: string, offset = 0, limit = 10) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'getExpensesPaginated',
     args: [BigInt(offset), BigInt(limit)],
     query: {
@@ -115,7 +115,7 @@ export function useGroupExpenses(groupAddress?: string, offset = 0, limit = 10) 
 export function useGroupMembers(groupAddress?: string, offset = 0, limit = 20) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'getMembersPaginated',
     args: [BigInt(offset), BigInt(limit)],
     query: {
@@ -127,7 +127,7 @@ export function useGroupMembers(groupAddress?: string, offset = 0, limit = 20) {
 export function useGroupName(groupAddress?: string) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'groupName',
     query: {
       enabled: !!groupAddress,
@@ -138,7 +138,7 @@ export function useGroupName(groupAddress?: string) {
 export function useMemberInfo(groupAddress?: string, memberAddress?: string) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'getMemberInfo',
     args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
@@ -151,7 +151,7 @@ export function useMemberInfo(groupAddress?: string, memberAddress?: string) {
 export function useMemberBalance(groupAddress?: string, memberAddress?: string) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'getBalance',
     args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
@@ -164,7 +164,7 @@ export function useMemberBalance(groupAddress?: string, memberAddress?: string) 
 export function useDebtTo(groupAddress?: string, creditorAddress?: string) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
+    abi: CONTRACTS.careCircle.abi,
     functionName: 'getDebtTo',
     args: creditorAddress ? [creditorAddress as `0x${string}`] : undefined,
     query: {
@@ -191,8 +191,8 @@ export function useMemberNickname(groupAddress?: string, memberAddress?: string)
 
 export function useCreationFee() {
   return useReadContract({
-    address: CONTRACTS.EXPENSE_FACTORY,
-    abi: EXPENSE_FACTORY_ABI,
+    address: CONTRACTS.careCircleFactory.address,
+    abi: CONTRACTS.careCircleFactory.abi,
     functionName: 'creationFee',
   });
 }
@@ -205,8 +205,8 @@ export function useDeactivateGroup() {
 
   const deactivateGroup = (groupAddress: string) => {
     writeContract({
-      address: CONTRACTS.EXPENSE_FACTORY,
-      abi: EXPENSE_FACTORY_ABI,
+      address: CONTRACTS.careCircleFactory.address,
+      abi: CONTRACTS.careCircleFactory.abi,
       functionName: 'deactivateGroup',
       args: [groupAddress as `0x${string}`],
     } as any);
@@ -236,7 +236,7 @@ export function useAddMember(groupAddress: string) {
     setLastAddedNickname(nickname);
     writeContract({
       address: groupAddress as `0x${string}`,
-      abi: GROUP_TREASURY_ABI,
+      abi: CONTRACTS.careCircle.abi,
       functionName: 'addMember',
       args: [memberAddress as `0x${string}`, nickname],
     } as any);
@@ -245,12 +245,7 @@ export function useAddMember(groupAddress: string) {
   // Trigger sync notification when member is successfully added
   useEffect(() => {
     if (isSuccess && lastAddedMember && hash) {
-      console.log('✅ Member addition confirmed, triggering sync:', {
-        member: lastAddedMember,
-        nickname: lastAddedNickname,
-        group: groupAddress,
-        hash
-      });
+      // Member addition confirmed, triggering sync
       
       // Notify all tabs that this user has been added to the group
       groupSync.notifyMemberAdded(lastAddedMember, groupAddress);
@@ -282,7 +277,7 @@ export function useAddExpense(groupAddress: string) {
   const addExpense = (description: string, amount: bigint, participants: string[], receiptHash: string = '0x0000000000000000000000000000000000000000000000000000000000000000') => {
     writeContract({
       address: groupAddress as `0x${string}`,
-      abi: GROUP_TREASURY_ABI,
+      abi: CONTRACTS.careCircle.abi,
       functionName: 'addExpense',
       args: [description, amount, participants.map(p => p as `0x${string}`), receiptHash as `0x${string}`],
     } as any);
@@ -306,7 +301,7 @@ export function useSettleDebt(groupAddress: string) {
   const settleDebt = (creditorAddress: string, amount: bigint) => {
     writeContract({
       address: groupAddress as `0x${string}`,
-      abi: GROUP_TREASURY_ABI,
+      abi: CONTRACTS.careCircle.abi,
       functionName: 'settleDebt',
       args: [creditorAddress as `0x${string}`],
       value: amount,

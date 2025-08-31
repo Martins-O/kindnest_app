@@ -16,26 +16,20 @@ import { NetworkTest } from '@/components/NetworkTest';
 export default function Dashboard() {
   const { address, isConnected } = useAccount();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [nickname, setNickname] = useState('');
 
   const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups, error: groupsError } = useUserGroups(address);
 
-  // Debug logging
-  useEffect(() => {
-    const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
-    console.log(`[${timestamp}] Dashboard: User ${address?.slice(0, 6)}...`);
-    console.log(`[${timestamp}] Dashboard: Groups loading:`, groupsLoading);
-    if (groupsError) {
-      console.error(`[${timestamp}] Error fetching user groups:`, groupsError);
-    }
-    if (userGroupAddresses) {
-      console.log(`[${timestamp}] User group addresses (${userGroupAddresses.length}):`, userGroupAddresses);
-    }
-  }, [address, groupsLoading, groupsError, userGroupAddresses]);
+  // Debug logging removed for production security
   const { createGroup, isPending, isConfirming, isSuccess } = useCreateGroup();
   const { data: creationFee } = useCreationFee();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
@@ -55,11 +49,11 @@ export default function Dashboard() {
   // Set up cross-tab dashboard sync
   useEffect(() => {
     if (address && refetchGroups) {
-      console.log('🎯 Setting up dashboard sync for user:', address.slice(0, 6) + '...');
+      // Setting up dashboard sync
       groupSync.onDashboardChange(refetchGroups);
       
       return () => {
-        console.log('🧹 Cleaning up dashboard sync');
+        // Cleaning up dashboard sync
         groupSync.removeListener('dashboard-refresh');
       };
     }
@@ -85,6 +79,14 @@ export default function Dashboard() {
     );
   }
 
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
       <div className="container mx-auto px-4 py-8">
@@ -97,7 +99,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-4">
             <Button
               onClick={() => {
-                console.log('🔄 Manual refresh triggered');
+                // Manual refresh triggered
                 refetchGroups();
               }}
               variant="outline"
@@ -243,13 +245,13 @@ function GroupCard({
   // Debug logging
   useEffect(() => {
     if (groupInfoError) {
-      console.error(`Error fetching group info for ${groupAddress}:`, groupInfoError);
+      // Error fetching group info
     }
     if (memberInfoError) {
-      console.error(`Error fetching member info for ${groupAddress}:`, memberInfoError);
+      // Error fetching member info
     }
     if (balanceError) {
-      console.error(`Error fetching balance for ${groupAddress}:`, balanceError);
+      // Error fetching balance
     }
   }, [groupAddress, groupInfoError, memberInfoError, balanceError]);
 

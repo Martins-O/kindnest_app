@@ -1,35 +1,4 @@
-export const CONTRACT_ADDRESSES = {
-  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x0000000000000000000000000000000000000000') as `0x${string}`,
-  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x0000000000000000000000000000000000000000') as `0x${string}`,
-} as const
-
-// Check if contracts are deployed
-export const ARE_CONTRACTS_DEPLOYED = CONTRACT_ADDRESSES.CARE_CIRCLE_FACTORY !== '0x0000000000000000000000000000000000000000'
-
-// ABI imports (unchanged - EVM compatible)
-export { default as CareCircleFactoryABI } from '../abis/ExpenseFactory.json'
-export { default as CareCircleABI } from '../abis/GroupTreasury.json'
-
-// Network configuration
-export const NETWORK_CONFIG = {
-  chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '4202'),
-  name: 'LISK',
-  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia-blockscout.lisk.com',
-  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia-api.lisk.com',
-} as const
-
-// Contract interaction helpers
-export const CONTRACTS = {
-  careCircleFactory: {
-    address: CONTRACT_ADDRESSES.CARE_CIRCLE_FACTORY,
-    abi: CareCircleFactoryABI,
-  },
-  careCircle: {
-    abi: CareCircleABI,
-  }
-} as const
-
-// Contract ABIs - Updated from deployed contracts
+// Contract ABIs - Define first so they can be used below
 export const EXPENSE_FACTORY_ABI = [
   {
     "inputs": [],
@@ -1475,3 +1444,31 @@ export const GROUP_TREASURY_ABI = [
     "type": "receive"
   }
 ] as const;
+
+// Contract addresses and configuration
+export const CONTRACT_ADDRESSES = {
+  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x0000000000000000000000000000000000000000') as `0x${string}`,
+  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x0000000000000000000000000000000000000000') as `0x${string}`,
+} as const
+
+// Check if contracts are deployed
+export const ARE_CONTRACTS_DEPLOYED = CONTRACT_ADDRESSES.CARE_CIRCLE_FACTORY !== '0x0000000000000000000000000000000000000000'
+
+// Network configuration
+export const NETWORK_CONFIG = {
+  chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '4202'),
+  name: 'LISK',
+  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia-blockscout.lisk.com',
+  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia-api.lisk.com',
+} as const
+
+// Contract interaction helpers
+export const CONTRACTS = {
+  careCircleFactory: {
+    address: CONTRACT_ADDRESSES.CARE_CIRCLE_FACTORY,
+    abi: EXPENSE_FACTORY_ABI,
+  },
+  careCircle: {
+    abi: GROUP_TREASURY_ABI,
+  }
+} as const

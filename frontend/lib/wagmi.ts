@@ -44,11 +44,8 @@ const liskSepoliaConfig = {
 export const config = createConfig({
   chains: [liskSepoliaConfig, liskChainConfig], // Testnet first for development
   connectors: [
-    metaMask(),
+    // metaMask(),
     coinbaseWallet({ appName: 'KindNest - Community Care Platform' }),
-    ...(process.env.NEXT_PUBLIC_WC_PROJECT_ID && process.env.NEXT_PUBLIC_WC_PROJECT_ID !== 'your_wc_project_id' 
-      ? [walletConnect({ projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID })] 
-      : []),
   ],
   transports: {
     [liskSepoliaConfig.id]: http('https://rpc.sepolia-api.lisk.com'),

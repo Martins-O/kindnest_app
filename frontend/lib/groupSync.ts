@@ -27,14 +27,14 @@ export class GroupSyncManager {
       timestamp: Date.now(),
     };
     
-    console.log('🔔 Broadcasting member added event:', event);
+    // Broadcasting member added event
     localStorage.setItem('group-sync-event', JSON.stringify(event));
     
     // Trigger local listeners immediately for the new member
     const userKey = `user-groups-${userAddress}`;
     const userListener = this.listeners.get(userKey);
     if (userListener) {
-      console.log(`🔄 Triggering immediate refresh for new member: ${userAddress.slice(0, 6)}...`);
+      // Triggering immediate refresh for new member
       setTimeout(userListener, 2000); // Delay for blockchain sync
     }
     
@@ -42,7 +42,7 @@ export class GroupSyncManager {
     const dashboardKey = 'dashboard-refresh';
     const dashboardListener = this.listeners.get(dashboardKey);
     if (dashboardListener) {
-      console.log('🔄 Triggering dashboard refresh for all users');
+      // Triggering dashboard refresh for all users
       setTimeout(dashboardListener, 3000); // Slightly longer delay
     }
   }
@@ -51,7 +51,7 @@ export class GroupSyncManager {
   onDashboardChange(callback: () => void) {
     const key = 'dashboard-refresh';
     this.listeners.set(key, callback);
-    console.log('👂 Listening for dashboard changes');
+    // Listening for dashboard changes
   }
 
   // Listen for group membership changes for a specific user
@@ -59,7 +59,7 @@ export class GroupSyncManager {
     const key = `user-groups-${userAddress}`;
     this.listeners.set(key, callback);
     
-    console.log(`👂 Listening for group changes for user: ${userAddress.slice(0, 6)}...`);
+    // Listening for group changes for user
   }
 
   // Remove listener
@@ -78,14 +78,14 @@ export class GroupSyncManager {
     if (event.key === 'group-sync-event' && event.newValue) {
       try {
         const syncEvent = JSON.parse(event.newValue);
-        console.log('📡 Received cross-tab sync event:', syncEvent);
+        // Received cross-tab sync event
         
         if (syncEvent.type === 'MEMBER_ADDED') {
           // Trigger refresh for the specific user who was added
           const userKey = `user-groups-${syncEvent.userAddress}`;
           const userListener = this.listeners.get(userKey);
           if (userListener) {
-            console.log(`🔄 Cross-tab: Triggering refetch for new member: ${syncEvent.userAddress.slice(0, 6)}...`);
+            // Cross-tab: Triggering refetch for new member
             setTimeout(userListener, 2000); // Delay for blockchain sync
           }
           
@@ -93,12 +93,12 @@ export class GroupSyncManager {
           const dashboardKey = 'dashboard-refresh';
           const dashboardListener = this.listeners.get(dashboardKey);
           if (dashboardListener) {
-            console.log('🔄 Cross-tab: Triggering dashboard refresh');
+            // Cross-tab: Triggering dashboard refresh
             setTimeout(dashboardListener, 3000);
           }
         }
       } catch (error) {
-        console.error('Error parsing sync event:', error);
+        // Error parsing sync event
       }
     }
   }

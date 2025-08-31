@@ -148,6 +148,7 @@ function PaginationControls({
 export default function GroupDetailClient({ groupAddress }: { groupAddress: string }) {
   const { address, isConnected } = useAccount();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   
   const [showAddMember, setShowAddMember] = useState(false);
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -205,22 +206,11 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   }, [isConnected, router]);
 
   useEffect(() => {
-    console.log('Member addition status:', {
-      isPending: addingMember,
-      isSuccess: memberAdded,
-      hash: addMemberHash,
-      error: addMemberError,
-      lastAddedMember,
-      lastAddedNickname
-    });
+    // Member addition status tracking
     
     // Handle successful member addition
     if (memberAdded && addMemberHash) {
-      console.log('✅ Member added successfully!', {
-        hash: addMemberHash,
-        newMember: lastAddedMember,
-        nickname: lastAddedNickname
-      });
+      // Member added successfully
       setShowAddMember(false);
       setMemberAddress('');
       setMemberNickname('');
@@ -234,7 +224,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
     
     // Handle errors
     if (addMemberError) {
-      console.error('❌ Member addition failed:', addMemberError);
+      // console.error('❌ Member addition failed:', addMemberError);
       let errorMsg = 'Failed to add member. ';
       
       if (addMemberError.message?.includes('OnlyOwner')) {
@@ -277,6 +267,10 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
     }
   }, [groupDeactivated, router]);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Get member nicknames for display
   const getMemberNicknames = async () => {
     if (!members) return {};
@@ -288,14 +282,9 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   const handleAddMember = (e: React.FormEvent) => {
     e.preventDefault();
     if (memberAddress.trim() && memberNickname.trim()) {
-      console.log('🔄 Adding member to group:', {
-        groupAddress,
-        memberAddress: memberAddress.trim(),
-        nickname: memberNickname.trim()
-      });
       addMember(memberAddress.trim(), memberNickname.trim());
     } else {
-      console.warn('❌ Cannot add member: missing address or nickname');
+      // console.warn('❌ Cannot add member: missing address or nickname');
     }
   };
 
@@ -307,7 +296,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
         const hashToUse = receiptHash.trim() || '0x0000000000000000000000000000000000000000000000000000000000000000';
         addExpense(expenseDescription.trim(), amount, selectedParticipants, hashToUse);
       } catch (error) {
-        console.error('Invalid amount:', error);
+        // console.error('Invalid amount:', error);
       }
     }
   };
@@ -327,7 +316,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
         const amount = parseETH(settleAmount);
         settleDebt(settleToAddress.trim(), amount);
       } catch (error) {
-        console.error('Invalid amount:', error);
+        // console.error('Invalid amount:', error);
       }
     }
   };
@@ -359,17 +348,19 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -inset-10 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+      {isMounted && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -inset-10 opacity-30">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+            <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
+            <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
-        <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`transition-all duration-1000 ${isMounted && isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <Button 
