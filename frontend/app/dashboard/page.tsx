@@ -3,6 +3,8 @@
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useCustomAuth } from '@/hooks/useCustomAuth';
+import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf } from 'lucide-react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useUserGroups, useUserGroupsWithEventListener, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
@@ -15,16 +17,26 @@ import { NetworkTest } from '@/components/NetworkTest';
 
 export default function Dashboard() {
   const { address, isConnected } = useAccount();
+  const { isAuthenticated } = useCustomAuth();
+  const { smartAccountAddress } = useAAWalletContext();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups, error: groupsError } = useUserGroups(address);
+  // Use either traditional wallet address or smart account address
+  const userAddress = smartAccountAddress || address;
+  const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups, error: groupsError } = useUserGroups(userAddress);
 
-  // Debug logging removed for production security
-  const { createGroup, isPending, isConfirming, isSuccess } = useCreateGroup();
+  // Error handling for groups loading
+  useEffect(() => {
+    if (groupsError) {
+      console.error('Error loading user groups:', groupsError);
+    }
+  }, [groupsError]);
+
+  const { createGroup, isPending, isConfirming, isSuccess, error: createGroupError } = useCreateGroup();
   const { data: creationFee } = useCreationFee();
 
   useEffect(() => {
@@ -32,10 +44,10 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && !isAuthenticated) {
       router.push('/');
     }
-  }, [isConnected, router]);
+  }, [isConnected, isAuthenticated, router]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -45,6 +57,13 @@ export default function Dashboard() {
       refetchGroups();
     }
   }, [isSuccess, refetchGroups]);
+
+  // Handle group creation errors
+  useEffect(() => {
+    if (createGroupError) {
+      console.error('Group creation failed:', createGroupError);
+    }
+  }, [createGroupError]);
 
   // Set up cross-tab dashboard sync
   useEffect(() => {
@@ -66,13 +85,18 @@ export default function Dashboard() {
     }
   };
 
-  if (!isConnected) {
+  if (!isConnected && !isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center">
-        <Card className="p-8">
+        <Card className="p-8 bg-white/5 backdrop-blur-lg border-white/10">
           <CardContent>
-            <h2 className="text-2xl font-bold mb-4">Please connect your wallet</h2>
-            <ConnectButton />
+            <h2 className="text-2xl font-bold mb-4 text-white">Please connect your wallet</h2>
+            <div className="text-center">
+              <ConnectButton />
+              <p className="text-white/60 text-sm mt-4">
+                Or sign up with email for gasless transactions
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -149,6 +173,7 @@ export default function Dashboard() {
                     type="submit" 
                     loading={isPending || isConfirming}
                     disabled={!groupName.trim() || !nickname.trim()}
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white border-0"
                   >
                     Create Your Nest
                   </Button>
@@ -169,7 +194,7 @@ export default function Dashboard() {
         <div className="grid gap-6">
           {/* Create Group Card */}
           {!showCreateGroup && (
-            <Card className="border-2 border-dashed border-kindnest-400/30 hover:border-kindnest-500 bg-white/5 backdrop-blur-lg transition-all duration-300 cursor-pointer hover:scale-105">
+            <Card className="border-2 border-dashed border-kindnest-400/30 hover:border-kindnest-500 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 backdrop-blur-lg transition-all duration-300 cursor-pointer hover:scale-105">
               <CardContent 
                 className="flex flex-col items-center justify-center py-12 text-center"
                 onClick={() => setShowCreateGroup(true)}
@@ -198,7 +223,7 @@ export default function Dashboard() {
                 <GroupCard 
                   key={groupAddress}
                   groupAddress={groupAddress}
-                  userAddress={address}
+                  userAddress={userAddress}
                   onGroupClick={(addr) => router.push(`/groups/${addr}`)}
                 />
               ))}
@@ -242,16 +267,16 @@ function GroupCard({
   const { data: balance, error: balanceError } = useMemberBalance(groupAddress, userAddress);
   const isMember = useIsMember(groupAddress, userAddress);
 
-  // Debug logging
+  // Error handling for debugging
   useEffect(() => {
     if (groupInfoError) {
-      // Error fetching group info
+      console.error(`Error fetching group info for ${groupAddress}:`, groupInfoError);
     }
     if (memberInfoError) {
-      // Error fetching member info
+      console.error(`Error fetching member info for ${groupAddress}:`, memberInfoError);
     }
     if (balanceError) {
-      // Error fetching balance
+      console.error(`Error fetching balance for ${groupAddress}:`, balanceError);
     }
   }, [groupAddress, groupInfoError, memberInfoError, balanceError]);
 
