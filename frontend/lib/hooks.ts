@@ -2,7 +2,6 @@
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useWatchContractEvent } from 'wagmi';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { CONTRACTS } from './contracts';
 import { shortenAddress } from './utils';
 import { groupSync } from './groupSync';
@@ -10,40 +9,19 @@ import type { GroupInfo, Expense, Member } from '@/types';
 
 // Factory hooks
 export function useCreateGroup() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
 
   const createGroup = (name: string, creatorNickname: string) => {
-    try {
-      writeContract({
-        address: CONTRACTS.careCircleFactory.address,
-        abi: CONTRACTS.careCircleFactory.abi,
-        functionName: 'createGroup',
-        args: [name, creatorNickname],
-        value: 0n,
-      } as any);
-    } catch (err) {
-      console.error('Failed to create group:', err);
-    }
+    writeContract({
+      address: CONTRACTS.careCircleFactory.address,
+      abi: CONTRACTS.careCircleFactory.abi,
+      functionName: 'createGroup',
+      args: [name, creatorNickname],
+    } as any);
   };
-
-  // Trigger sync notification when group is successfully created
-  useEffect(() => {
-    if (isSuccess && hash) {
-      setTimeout(() => {
-        groupSync.notifyDashboardChange();
-      }, 3000);
-    }
-  }, [isSuccess, hash]);
-
-  // Log errors for debugging
-  useEffect(() => {
-    if (error) {
-      console.error('Group creation error:', error);
-    }
-  }, [error]);
 
   return {
     createGroup,
@@ -51,7 +29,6 @@ export function useCreateGroup() {
     isPending,
     isConfirming,
     isSuccess,
-    error,
   };
 }
 
