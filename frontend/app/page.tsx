@@ -4,9 +4,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { WalletSelector } from '@/components/auth/WalletSelector';
-import { useCustomAuth } from '@/hooks/useCustomAuth';
-import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
 import { 
   Heart, 
   Users, 
@@ -26,17 +23,15 @@ import {
 
 export default function Home() {
   const { isConnected } = useAccount();
-  const { isAuthenticated } = useCustomAuth();
-  const { smartAccountAddress } = useAAWalletContext();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
-    if (isConnected || (isAuthenticated && smartAccountAddress)) {
+    if (isConnected) {
       router.push('/dashboard');
     }
-  }, [isConnected, isAuthenticated, smartAccountAddress, router]);
+  }, [isConnected, router]);
 
   const features = [
     {
@@ -147,14 +142,25 @@ export default function Home() {
             Every little helps, adding up to something beautiful.
           </p>
 
-          <div className="flex flex-col items-center justify-center gap-6 mb-16">
-            <WalletSelector />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
+              <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
+                <ConnectButton />
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group">
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </div>
             <button 
               onClick={() => router.push('/how-it-works')}
               className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group"
             >
-              <span>Learn how to create your nest of support</span>
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
+                <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
+                  <span> Create your nest of support</span>
+                </div>
+              </div>
+              
             </button>
           </div>
 
@@ -287,16 +293,20 @@ export default function Home() {
               beautiful it feels when support flows naturally.
             </p>
             
-            <div className="flex flex-col items-center justify-center gap-6">
-              <WalletSelector />
-              <div className="text-white/60 text-sm text-center">
-                <div className="flex items-center justify-center space-x-2 mb-1">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
+                <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
+                  <ConnectButton />
+                </div>
+              </div>
+              <div className="text-white/60 text-sm">
+                <div className="flex items-center space-x-2 mb-1">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   <span>LISK Sepolia Testnet</span>
                 </div>
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-green-400" />
-                  <span>Email signup with gasless transactions</span>
+                  <span>Free to use*</span>
                 </div>
               </div>
             </div>

@@ -284,8 +284,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
     if (memberAddress.trim() && memberNickname.trim()) {
       addMember(memberAddress.trim(), memberNickname.trim());
     } else {
-      setErrorMessage('Please enter both member address and nickname');
-      setTimeout(() => setErrorMessage(null), 5000);
+      // console.warn('❌ Cannot add member: missing address or nickname');
     }
   };
 
@@ -297,8 +296,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
         const hashToUse = receiptHash.trim() || '0x0000000000000000000000000000000000000000000000000000000000000000';
         addExpense(expenseDescription.trim(), amount, selectedParticipants, hashToUse);
       } catch (error) {
-        setErrorMessage('Invalid expense amount. Please enter a valid number.');
-        setTimeout(() => setErrorMessage(null), 5000);
+        // console.error('Invalid amount:', error);
       }
     }
   };
@@ -318,8 +316,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
         const amount = parseETH(settleAmount);
         settleDebt(settleToAddress.trim(), amount);
       } catch (error) {
-        setErrorMessage('Invalid settlement amount. Please enter a valid number.');
-        setTimeout(() => setErrorMessage(null), 5000);
+        // console.error('Invalid amount:', error);
       }
     }
   };
