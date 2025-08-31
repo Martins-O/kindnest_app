@@ -9,7 +9,6 @@ A warm, community-focused platform where support flows as naturally as love. Bui
 Built for the **Aleph Hackathon - LISK & Web3Bridge Partnership** 🏆
 
 ## 🌟 Features
-
 ### 💚 **Human-Centered Support**
 - **Create Your Nest**: Start intimate circles of care with the people who matter
 - **Share Costs, Share Care**: Transparent contribution tracking where every gesture counts
