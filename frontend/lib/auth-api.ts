@@ -1,0 +1,245 @@
+'use client';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+export interface User {
+  id: string;
+  email: string;
+  smartAccountAddress: string;
+  isVerified: boolean;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message?: string;
+  token?: string;
+  user?: User;
+  smartAccountAddress?: string;
+  error?: string;
+}
+
+// Check if email has existing wallet/account
+export async function checkExistingEmail(email: string): Promise<{ exists: boolean; user?: User; error?: string }> {
+  const normalizedEmail = email.toLowerCase().trim();
+  
+  try {
+    // Try backend first with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+    const response = await fetch(`${API_BASE_URL}/auth/check-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: normalizedEmail }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    }
+  } catch (error) {
+    console.log('Backend unavailable for email check, using local cache');
+  }
+  
+  // Fallback: Check if we have cached data for this email
+  try {
+    const cachedUserData = localStorage.getItem('kindnest_user_cache');
+    if (cachedUserData) {
+      const cachedUser = JSON.parse(cachedUserData);
+      if (cachedUser.email === normalizedEmail) {
+        return { exists: true, user: cachedUser };
+      }
+    }
+    
+    // Also check if we have a cached smart account for this email
+    const cachedAddress = localStorage.getItem(`smart_account_${normalizedEmail}`);
+    if (cachedAddress) {
+      return { 
+        exists: true, 
+        user: {
+          id: `cached-${normalizedEmail}`,
+          email: normalizedEmail,
+          smartAccountAddress: cachedAddress,
+          isVerified: false
+        }
+      };
+    }
+  } catch (error) {
+    console.error('Error checking cached data:', error);
+  }
+  
+  return { exists: false };
+}
+
+// Send OTP to email
+export async function sendOTP(email: string): Promise<AuthResponse> {
+  try {
+    // Try backend first with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(`${API_BASE_URL}/auth/send-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { success: false, error: errorData.error || `HTTP ${response.status}` };
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Backend unavailable for OTP, using demo mode');
+    
+    // Demo mode fallback - store email and return success
+    localStorage.setItem('demo_auth_email', email);
+    return { 
+      success: true, 
+      message: 'Demo mode: Use OTP code "123456" to login' 
+    };
+  }
+}
+
+// Verify OTP and login
+export async function verifyOTP(email: string, otp: string): Promise<AuthResponse> {
+  try {
+    // Try backend first with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, otp }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { success: false, error: errorData.error || `HTTP ${response.status}` };
+    }
+
+    const data = await response.json();
+
+    if (data.success && data.token) {
+      // Store token in localStorage
+      localStorage.setItem('kindnest_token', data.token);
+      
+      // Cache user data for offline use
+      if (data.user) {
+        // Ensure email is normalized for consistency
+        data.user.email = data.user.email.toLowerCase().trim();
+        localStorage.setItem('kindnest_user_cache', JSON.stringify(data.user));
+      }
+    }
+
+    return data;
+  } catch (error) {
+    console.log('Backend unavailable for OTP verification, using demo mode:', error.message);
+    
+    // Demo mode fallback
+    const demoEmail = localStorage.getItem('demo_auth_email');
+    
+    if (demoEmail === email && otp === '123456') {
+      // Create a demo user with normalized email
+      const normalizedEmail = email.toLowerCase().trim();
+      const demoUser: User = {
+        id: `demo-${normalizedEmail}`,
+        email: normalizedEmail,
+        smartAccountAddress: '', // Will be generated by useCustomAuth
+        isVerified: true
+      };
+      
+      // Create a demo token
+      const demoToken = `demo-token-${Date.now()}`;
+      localStorage.setItem('kindnest_token', demoToken);
+      localStorage.setItem('kindnest_user_cache', JSON.stringify(demoUser));
+      
+      return {
+        success: true,
+        user: demoUser,
+        token: demoToken,
+        message: 'Demo mode login successful'
+      };
+    } else {
+      return { success: false, error: 'Demo mode: use OTP "123456"' };
+    }
+  }
+}
+
+// Get user profile
+export async function getUserProfile(): Promise<{ user: User | null; error?: string }> {
+  try {
+    const token = localStorage.getItem('kindnest_token');
+    console.log('🔍 getUserProfile: Token exists:', !!token);
+
+    if (!token) {
+      console.log('🔍 getUserProfile: No token found in localStorage');
+      return { user: null };
+    }
+
+    // Try to fetch from backend with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      const data = await response.json();
+
+      if (response.ok && data.user) {
+        return { user: data.user };
+      } else {
+        console.log('Profile fetch failed:', { status: response.status, data });
+        return { user: null, error: data.error || `HTTP ${response.status}` };
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      console.log('🔍 getUserProfile: Backend unavailable, checking for cached user data');
+      
+      // Fallback: check if we have cached user data in localStorage
+      const cachedUserData = localStorage.getItem('kindnest_user_cache');
+      if (cachedUserData) {
+        try {
+          const user = JSON.parse(cachedUserData);
+          console.log('🔍 getUserProfile: Using cached user data');
+          return { user };
+        } catch (parseError) {
+          console.error('Failed to parse cached user data:', parseError);
+        }
+      }
+      
+      return { user: null, error: 'Backend unavailable' };
+    }
+  } catch (error) {
+    return { user: null, error: 'Network error' };
+  }
+}
+
+// Logout
+export async function logout(): Promise<void> {
+  localStorage.removeItem('kindnest_token');
+}

@@ -11,7 +11,7 @@ describe("SplitWise 3.0 Contracts", function () {
     
     ExpenseFactory = await ethers.getContractFactory("ExpenseFactory");
     expenseFactory = await ExpenseFactory.deploy();
-    await expenseFactory.deployed();
+    await expenseFactory.waitForDeployment();
   });
 
   describe("ExpenseFactory", function () {
@@ -19,10 +19,18 @@ describe("SplitWise 3.0 Contracts", function () {
       const tx = await expenseFactory.connect(user1).createGroup("Test Group", "Alice");
       const receipt = await tx.wait();
       
-      const event = receipt.events?.find(e => e.event === "GroupCreated");
+      const event = receipt.logs.find(log => {
+        try {
+          const parsedLog = expenseFactory.interface.parseLog(log);
+          return parsedLog.name === 'GroupCreated';
+        } catch {
+          return false;
+        }
+      });
       expect(event).to.not.be.undefined;
       
-      const groupAddress = event.args.group;
+      const parsedLog = expenseFactory.interface.parseLog(event);
+      const groupAddress = parsedLog.args.group;
       const userGroups = await expenseFactory.getUserGroups(user1.address);
       expect(userGroups).to.include(groupAddress);
     });
@@ -52,8 +60,16 @@ describe("SplitWise 3.0 Contracts", function () {
     beforeEach(async function () {
       const tx = await expenseFactory.connect(user1).createGroup("Test Group", "Alice");
       const receipt = await tx.wait();
-      const event = receipt.events?.find(e => e.event === "GroupCreated");
-      groupAddress = event.args.group;
+      const event = receipt.logs.find(log => {
+        try {
+          const parsedLog = expenseFactory.interface.parseLog(log);
+          return parsedLog.name === 'GroupCreated';
+        } catch {
+          return false;
+        }
+      });
+      const parsedLog = expenseFactory.interface.parseLog(event);
+      groupAddress = parsedLog.args.group;
       
       GroupTreasury = await ethers.getContractFactory("GroupTreasury");
       groupContract = GroupTreasury.attach(groupAddress);
@@ -62,12 +78,18 @@ describe("SplitWise 3.0 Contracts", function () {
     it("Should have correct initial state", async function () {
       expect(await groupContract.groupName()).to.equal("Test Group");
       expect(await groupContract.owner()).to.equal(user1.address);
-      expect(await groupContract.getMemberCount()).to.equal(1);
+      
+      // Check member count using memberList length
+      const [members, totalMembers] = await groupContract.getMembersPaginated(0, 100);
+      expect(totalMembers).to.equal(1);
     });
 
     it("Should add members", async function () {
       await groupContract.connect(user1).addMember(user2.address, "Bob");
-      expect(await groupContract.getMemberCount()).to.equal(2);
+      
+      // Check member count using pagination
+      const [members, totalMembers] = await groupContract.getMembersPaginated(0, 100);
+      expect(totalMembers).to.equal(2);
       
       const member = await groupContract.getMemberInfo(user2.address);
       expect(member.nickname).to.equal("Bob");
@@ -81,9 +103,11 @@ describe("SplitWise 3.0 Contracts", function () {
       
       // Add expense
       const participants = [user1.address, user2.address, user3.address];
-      await groupContract.connect(user1).addExpense("Dinner", ethers.utils.parseEther("0.3"), participants);
+      await groupContract.connect(user1).addExpense("Dinner", ethers.parseEther("0.3"), participants, ethers.ZeroHash);
       
-      expect(await groupContract.getExpenseCount()).to.equal(1);
+      // Check expense count using pagination
+      const [expenses, totalExpenses] = await groupContract.getExpensesPaginated(0, 100);
+      expect(totalExpenses).to.equal(1);
       
       // Check balances
       const user1Balance = await groupContract.getBalance(user1.address);
@@ -101,7 +125,7 @@ describe("SplitWise 3.0 Contracts", function () {
       // Add member and expense
       await groupContract.connect(user1).addMember(user2.address, "Bob");
       const participants = [user1.address, user2.address];
-      await groupContract.connect(user1).addExpense("Lunch", ethers.utils.parseEther("0.2"), participants);
+      await groupContract.connect(user1).addExpense("Lunch", ethers.parseEther("0.2"), participants, ethers.ZeroHash);
       
       // Check debt
       const debtAmount = await groupContract.connect(user2).getDebtTo(user1.address);
@@ -119,11 +143,11 @@ describe("SplitWise 3.0 Contracts", function () {
       await groupContract.connect(user1).addMember(user2.address, "Bob");
       const participants = [user1.address, user2.address];
       
-      await groupContract.connect(user1).addExpense("Breakfast", ethers.utils.parseEther("0.1"), participants);
-      await groupContract.connect(user2).addExpense("Coffee", ethers.utils.parseEther("0.05"), participants);
+      await groupContract.connect(user1).addExpense("Breakfast", ethers.parseEther("0.1"), participants, ethers.ZeroHash);
+      await groupContract.connect(user2).addExpense("Coffee", ethers.parseEther("0.05"), participants, ethers.ZeroHash);
       
-      const expenses = await groupContract.getExpenses();
-      expect(expenses.length).to.equal(2);
+      const [expenses, totalExpenses] = await groupContract.getExpensesPaginated(0, 100);
+      expect(totalExpenses).to.equal(2);
       expect(expenses[0].description).to.equal("Breakfast");
       expect(expenses[1].description).to.equal("Coffee");
     });

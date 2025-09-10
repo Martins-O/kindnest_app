@@ -55,6 +55,30 @@ export const EXPENSE_FACTORY_ABI = [
       },
       {
         "indexed": false,
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "privacy",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxMembers",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "timestamp",
         "type": "uint256"
@@ -129,6 +153,36 @@ export const EXPENSE_FACTORY_ABI = [
       {
         "internalType": "string",
         "name": "_creatorNickname",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_category",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_privacy",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxMembers",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minimumContribution",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_contributionFrequency",
         "type": "string"
       }
     ],
@@ -205,6 +259,21 @@ export const EXPENSE_FACTORY_ABI = [
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "privacy",
+            "type": "string"
+          },
+          {
             "internalType": "address",
             "name": "creator",
             "type": "address"
@@ -213,6 +282,21 @@ export const EXPENSE_FACTORY_ABI = [
             "internalType": "uint256",
             "name": "createdAt",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxMembers",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minimumContribution",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "contributionFrequency",
+            "type": "string"
           },
           {
             "internalType": "bool",
@@ -281,6 +365,21 @@ export const EXPENSE_FACTORY_ABI = [
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "privacy",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "creator",
         "type": "address"
@@ -289,6 +388,21 @@ export const EXPENSE_FACTORY_ABI = [
         "internalType": "uint256",
         "name": "createdAt",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxMembers",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minimumContribution",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "contributionFrequency",
+        "type": "string"
       },
       {
         "internalType": "bool",
@@ -1447,8 +1561,8 @@ export const GROUP_TREASURY_ABI = [
 
 // Contract addresses and configuration
 export const CONTRACT_ADDRESSES = {
-  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x0000000000000000000000000000000000000000') as `0x${string}`,
-  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x0000000000000000000000000000000000000000') as `0x${string}`,
+  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x4732bd7fA6D7063Cf88F308DA26Df28A6395Fa0A') as `0x${string}`,
+  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x96D3a232D2A97A94D01eEA63F9f7254974DeD5B8') as `0x${string}`,
 } as const
 
 // Check if contracts are deployed
@@ -1469,6 +1583,9 @@ export const CONTRACTS = {
     abi: EXPENSE_FACTORY_ABI,
   },
   careCircle: {
+    abi: GROUP_TREASURY_ABI,
+  },
+  groupTreasury: {
     abi: GROUP_TREASURY_ABI,
   }
 } as const

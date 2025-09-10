@@ -9,8 +9,14 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
     struct GroupInfo {
         address groupAddress;
         string name;
+        string description;
+        string category;
+        string privacy; // "public", "private", "invite-only"
         address creator;
         uint256 createdAt;
+        uint256 maxMembers;
+        uint256 minimumContribution; // in wei
+        string contributionFrequency;
         bool active;
     }
 
@@ -25,6 +31,10 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
         address indexed group,
         address indexed creator,
         string name,
+        string description,
+        string category,
+        string privacy,
+        uint256 maxMembers,
         uint256 timestamp
     );
     event GroupDeactivated(address indexed group, uint256 timestamp);
@@ -33,10 +43,16 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
 
     function createGroup(
         string memory _name,
-        string memory _creatorNickname
+        string memory _creatorNickname,
+        string memory _description,
+        string memory _category,
+        string memory _privacy,
+        uint256 _maxMembers,
+        uint256 _minimumContribution,
+        string memory _contributionFrequency
     ) external payable nonReentrant returns (address) {
         require(
-            bytes(_name).length > 0 && bytes(_name).length <= 50,
+            bytes(_name).length > 0 && bytes(_name).length <= 100,
             "Invalid name"
         );
         require(
@@ -44,6 +60,21 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
                 bytes(_creatorNickname).length <= 32,
             "Invalid nickname"
         );
+        require(
+            bytes(_description).length <= 500,
+            "Description too long"
+        );
+        require(
+            bytes(_category).length > 0 && bytes(_category).length <= 50,
+            "Invalid category"
+        );
+        require(
+            keccak256(bytes(_privacy)) == keccak256(bytes("public")) ||
+            keccak256(bytes(_privacy)) == keccak256(bytes("private")) ||
+            keccak256(bytes(_privacy)) == keccak256(bytes("invite-only")),
+            "Invalid privacy setting"
+        );
+        require(_maxMembers > 0 && _maxMembers <= 1000, "Invalid max members");
         require(msg.value >= creationFee, "Insufficient fee");
         require(
             userGroups[msg.sender].length < maxGroupsPerUser,
@@ -60,8 +91,14 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
         groupInfos[groupAddress] = GroupInfo({
             groupAddress: groupAddress,
             name: _name,
+            description: _description,
+            category: _category,
+            privacy: _privacy,
             creator: msg.sender,
             createdAt: block.timestamp,
+            maxMembers: _maxMembers,
+            minimumContribution: _minimumContribution,
+            contributionFrequency: _contributionFrequency,
             active: true
         });
 
@@ -75,7 +112,16 @@ contract ExpenseFactory is Ownable, ReentrancyGuard {
             require(success, "Refund failed");
         }
 
-        emit GroupCreated(groupAddress, msg.sender, _name, block.timestamp);
+        emit GroupCreated(
+            groupAddress, 
+            msg.sender, 
+            _name, 
+            _description, 
+            _category, 
+            _privacy, 
+            _maxMembers, 
+            block.timestamp
+        );
         return groupAddress;
     }
 

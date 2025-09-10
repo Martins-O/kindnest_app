@@ -18,9 +18,21 @@ export function NetworkTest() {
 
   useEffect(() => {
     const testRpcDirectly = async () => {
+      // Only test once per session to avoid spamming
+      const lastTest = localStorage.getItem('rpc_test_time');
+      const now = Date.now();
+      
+      if (lastTest && now - parseInt(lastTest) < 60000) { // Don't test more than once per minute
+        setRpcTest({ status: 'success', result: 'Cached OK' });
+        return;
+      }
+      
       setRpcTest({ status: 'loading' });
       try {
-        const response = await fetch('https://rpc.sepolia-api.lisk.com', {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+        
+        const response = await fetch(process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia-api.lisk.com', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +43,10 @@ export function NetworkTest() {
             params: [],
             id: 1,
           }),
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -42,14 +57,16 @@ export function NetworkTest() {
           throw new Error(data.error.message);
         }
         
+        localStorage.setItem('rpc_test_time', now.toString());
         setRpcTest({
           status: 'success',
           result: `Block: ${parseInt(data.result, 16)}`,
         });
       } catch (error: any) {
+        console.warn('RPC test failed:', error.message); // Use console.warn instead of error
         setRpcTest({
           status: 'error',
-          error: error.message || 'Unknown error',
+          error: error.name === 'AbortError' ? 'Timeout' : (error.message || 'Unknown error'),
         });
       }
     };

@@ -1,10 +1,13 @@
 'use client';
 
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useWatchContractEvent } from 'wagmi';
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useWatchContractEvent, useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { CONTRACTS } from './contracts';
 import { shortenAddress } from './utils';
 import { groupSync } from './groupSync';
+import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
+import { useCustomAuth } from '@/hooks/useCustomAuth';
+import { encodeFunctionData } from 'viem';
 import type { GroupInfo, Expense, Member } from '@/types';
 
 // Factory hooks
@@ -13,22 +16,78 @@ export function useCreateGroup() {
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
+  const { isConnected } = useAccount();
+  const { isAuthenticated } = useCustomAuth();
+  const { sendGaslessTransaction } = useAAWalletContext();
+  
+  // Local state for AA wallet transactions
+  const [isAATransactionPending, setIsAATransactionPending] = useState(false);
+  const [aaTransactionSuccess, setAATransactionSuccess] = useState(false);
 
-  const createGroup = (name: string, creatorNickname: string) => {
-    writeContract({
-      address: CONTRACTS.careCircleFactory.address,
-      abi: CONTRACTS.careCircleFactory.abi,
-      functionName: 'createGroup',
-      args: [name, creatorNickname],
-    } as any);
+  const createGroup = async (
+    name: string, 
+    creatorNickname: string,
+    description: string = '',
+    category: string = 'custom',
+    privacy: string = 'public',
+    maxMembers: number = 50,
+    minimumContribution: number = 0, // in wei
+    contributionFrequency: string = 'as-needed'
+  ) => {
+    const args = [
+      name, 
+      creatorNickname, 
+      description, 
+      category, 
+      privacy, 
+      BigInt(maxMembers), 
+      BigInt(minimumContribution), 
+      contributionFrequency
+    ] as const;
+
+    // Use traditional wallet transaction if connected
+    if (isConnected) {
+      writeContract({
+        address: CONTRACTS.careCircleFactory.address,
+        abi: CONTRACTS.careCircleFactory.abi,
+        functionName: 'createGroup',
+        args,
+      } as any);
+    }
+    // Use AA wallet gasless transaction if authenticated with email
+    else if (isAuthenticated) {
+      try {
+        setIsAATransactionPending(true);
+        setAATransactionSuccess(false);
+
+        // Encode the function call data
+        const data = encodeFunctionData({
+          abi: CONTRACTS.careCircleFactory.abi,
+          functionName: 'createGroup',
+          args,
+        });
+
+        // Send gasless transaction
+        await sendGaslessTransaction(CONTRACTS.careCircleFactory.address, data);
+        
+        setAATransactionSuccess(true);
+      } catch (error) {
+        console.error('AA wallet transaction failed:', error);
+        throw error;
+      } finally {
+        setIsAATransactionPending(false);
+      }
+    } else {
+      throw new Error('No wallet connected or authenticated');
+    }
   };
 
   return {
     createGroup,
     hash,
-    isPending,
-    isConfirming,
-    isSuccess,
+    isPending: isPending || isAATransactionPending,
+    isConfirming: isConfirming,
+    isSuccess: isSuccess || aaTransactionSuccess,
   };
 }
 
