@@ -9,8 +9,8 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
-    "deploy:morph": "hardhat run scripts/deploy.js --network morphHolesky",
-    "verify": "hardhat verify --network morphHolesky"
+    "deploy:lisk": "hardhat run scripts/deploy.js --network liskSepolia",
+    "verify": "hardhat verify --network liskSepolia"
   },
   "keywords": [],
   "author": "",

@@ -6,6 +6,7 @@ import { WagmiProvider } from 'wagmi';
 import { RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
 import { merge } from 'lodash';
 import { config } from '@/lib/wagmi';
+import { AAWalletProvider } from '@/components/auth/AAWalletProvider';
 
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -78,9 +79,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={kindNestTheme} showRecentTransactions={true}>
-          {children}
-        </RainbowKitProvider>
+        <AAWalletProvider>
+          <RainbowKitProvider theme={kindNestTheme} showRecentTransactions={true}>
+            {children}
+          </RainbowKitProvider>
+        </AAWalletProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

@@ -491,9 +491,9 @@
   integrity sha512-iAIl6pIK3F4R3JXeq+b6tiShXUrp1sQRiPfqoCMUE7QLUzoFifzGV97IDRL6e73pWsMKpUQBsHBvTCsqn+ZdpA==
 
 "@nomicfoundation/hardhat-verify@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@nomicfoundation/hardhat-verify/-/hardhat-verify-2.1.0.tgz"
-  integrity sha512-ogRbwlzphOR2MK/TxDG/uOftEhVJtD81eBU32YZ/maqQOHYOPKymu7BvF9syp7b2fxID5/loEIvxizjW1yBvvQ==
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/@nomicfoundation/hardhat-verify/-/hardhat-verify-2.1.1.tgz"
+  integrity sha512-K1plXIS42xSHDJZRkrE2TZikqxp9T4y6jUMUNI/imLgN5uCcEQokmfU0DlyP9zzHncYK92HlT5IWP35UVCLrPw==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@ethersproject/address" "^5.0.2"
@@ -2456,9 +2456,9 @@ handlebars@^4.0.1:
     uglify-js "^3.1.4"
 
 hardhat-contract-sizer@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.npmjs.org/hardhat-contract-sizer/-/hardhat-contract-sizer-2.10.0.tgz"
-  integrity sha512-QiinUgBD5MqJZJh1hl1jc9dNnpJg7eE/w4/4GEnrcmZJJTDbVFNe3+/3Ep24XqISSkYxRz36czcPHKHd/a0dwA==
+  version "2.10.1"
+  resolved "https://registry.npmjs.org/hardhat-contract-sizer/-/hardhat-contract-sizer-2.10.1.tgz"
+  integrity sha512-/PPQQbUMgW6ERzk8M0/DA8/v2TEM9xRRAnF9qKPNMYF6FX5DFWcnxBsQvtp8uBz+vy7rmLyV9Elti2wmmhgkbg==
   dependencies:
     chalk "^4.0.0"
     cli-table3 "^0.6.0"
@@ -2486,9 +2486,9 @@ hardhat-gas-reporter@^2.3.0:
     viem "^2.27.0"
 
 hardhat@^2.0.0, hardhat@^2.11.0, hardhat@^2.16.0, hardhat@^2.26.0, hardhat@^2.26.1, hardhat@^2.9.9:
-  version "2.26.1"
-  resolved "https://registry.npmjs.org/hardhat/-/hardhat-2.26.1.tgz"
-  integrity sha512-CXWuUaTtehxiHPCdlitntctfeYRgujmXkNX5gnrD5jdA6HhRQt+WWBZE/gHXbE29y/wDmmUL2d652rI0ctjqjw==
+  version "2.26.3"
+  resolved "https://registry.npmjs.org/hardhat/-/hardhat-2.26.3.tgz"
+  integrity sha512-gBfjbxCCEaRgMCRgTpjo1CEoJwqNPhyGMMVHYZJxoQ3LLftp2erSVf8ZF6hTQC0r2wst4NcqNmLWqMnHg1quTw==
   dependencies:
     "@ethereumjs/util" "^9.1.0"
     "@ethersproject/abi" "^5.1.2"

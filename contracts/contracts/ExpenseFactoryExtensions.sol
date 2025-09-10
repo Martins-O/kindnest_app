@@ -54,7 +54,7 @@ contract ExpenseFactoryExtensions {
         uint256 resultCount = 0;
 
         for (uint256 i = 0; i < allActiveGroups.length; i++) {
-            (, string memory groupName, , , ) = factory.groupInfos(
+            (, string memory groupName, , , , , , , , , ) = factory.groupInfos(
                 allActiveGroups[i]
             );
             bytes memory groupNameBytes = bytes(groupName);

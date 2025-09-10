@@ -1,71 +1,137 @@
 @import "tailwindcss";
 
+/* High priority background styles - placed outside layers for maximum specificity */
+html, body {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 40%, #2c7744 70%, #14532d 100%) !important;
+  background-attachment: fixed !important;
+  min-height: 100vh !important;
+}
+
 @layer base {
   html {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     scroll-behavior: smooth;
+    /* Ensure the html element also has the background */
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 40%, #2c7744 70%, #14532d 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
   
   body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e293b 0%, #7c3aed 50%, #ec4899 100%);
+    /* Dark, nature-inspired background */
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 40%, #2c7744 70%, #14532d 100%) !important;
+    background-attachment: fixed !important;
     overflow-x: hidden;
+    color: #ffffff;
+    line-height: 1.6;
   }
-
+  
   * {
     box-sizing: border-box;
+  }
+
+  /* Improved text rendering */
+  body, button, input, select, textarea {
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
   .gradient-text {
-    @apply bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent;
   }
 
   .glass-effect {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl text-white;
   }
 
   .hover-glow {
     @apply transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/25;
   }
 
-  /* KindNest specific components */
+  /* Modern KindNest components - Dark theme optimized */
   .kindnest-button {
-    @apply transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg active:scale-95;
-    @apply bg-gradient-to-r from-emerald-500 to-teal-600;
-    @apply text-white font-medium rounded-xl px-6 py-3;
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    @apply transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl active:scale-95;
+    @apply bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500;
+    @apply text-white font-semibold rounded-2xl px-8 py-4;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
   }
 
   .kindnest-button:hover {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 12px 40px rgba(16, 185, 129, 0.6);
   }
 
   .kindnest-card {
-    @apply bg-white/5 backdrop-blur-lg rounded-3xl border border-white/10;
-    @apply transition-all duration-300 ease-out;
-    @apply hover:border-emerald-400/30 hover:bg-white/10;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    @apply bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 shadow-xl;
+    @apply transition-all duration-300 ease-out text-white;
+    @apply hover:border-white/30 hover:shadow-2xl;
   }
 
   .kindnest-card:hover {
-    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.01);
   }
 
   .kindnest-input {
     @apply bg-white/10 border border-white/20 rounded-xl px-4 py-3;
-    @apply text-white placeholder-white/50;
+    @apply text-white placeholder-white/60;
     @apply transition-all duration-200;
+    @apply focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20;
   }
 
-  .kindnest-input:focus {
-    @apply outline-none ring-2 ring-emerald-400/50 border-emerald-400;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  /* Dashboard specific styles */
+  .dashboard-card {
+    @apply bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg;
+    @apply transition-all duration-300 ease-out text-white;
+    @apply hover:border-white/30 hover:shadow-xl;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Group card styles */
+  .group-card {
+    @apply bg-white/10 backdrop-blur-sm text-white;
+    @apply rounded-3xl border border-white/20 shadow-lg;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:border-white/30 hover:shadow-2xl cursor-pointer;
+  }
+
+  .group-card:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+
+  /* Wallet component styles */
+  .wallet-card {
+    @apply bg-white/10 backdrop-blur-sm text-white;
+    @apply rounded-3xl border border-white/20 shadow-xl;
+    @apply transition-all duration-300;
+  }
+
+  /* Form styles */
+  .form-card {
+    @apply bg-white/10 backdrop-blur-lg text-white;
+    @apply rounded-3xl border border-white/20 shadow-2xl;
+  }
+
+  /* Status indicators - Dark theme optimized */
+  .status-deployed {
+    @apply bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border border-emerald-400/30;
+  }
+
+  .status-not-deployed {
+    @apply bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-300 border border-orange-400/30;
+  }
+
+  .status-loading {
+    @apply bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-300 border border-blue-400/30;
   }
 }
 
@@ -80,6 +146,26 @@
 
   .animate-bounce-gentle {
     animation: bounceGentle 2s infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite 2s;
+  }
+
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite 4s;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-right {
+    animation: slideRight 0.6s ease-out forwards;
   }
 }
 
@@ -115,63 +201,87 @@
   }
 }
 
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(148, 163, 184, 0.1);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #10b981, #14b8a6);
+  background: linear-gradient(to bottom, #22c55e, #10b981, #059669);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #059669, #0d9488);
+  background: linear-gradient(to bottom, #16a34a, #059669, #047857);
 }
 
 /* Custom KindNest styling for RainbowKit */
 [data-rk] .rk-connect-button {
-  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) !important;
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 50%, #059669 100%) !important;
   border: none !important;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3) !important;
   transition: all 0.3s ease !important;
-  border-radius: 12px !important;
+  border-radius: 16px !important;
+  font-weight: 600 !important;
 }
 
 [data-rk] .rk-connect-button:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 40px rgba(34, 197, 94, 0.4) !important;
 }
 
 [data-rk] .rk-account-button {
-  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) !important;
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 50%, #059669 100%) !important;
   border: none !important;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3) !important;
   transition: all 0.3s ease !important;
-  border-radius: 12px !important;
+  border-radius: 16px !important;
+  font-weight: 600 !important;
 }
 
 [data-rk] .rk-account-button:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 40px rgba(34, 197, 94, 0.4) !important;
 }
 
 /* RainbowKit modal styling */
 [data-rk] .rk-modal-backdrop {
-  backdrop-filter: blur(8px) !important;
-  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 
 [data-rk] .rk-modal-container {
-  background: rgba(15, 23, 42, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
   border-radius: 24px !important;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Enhanced animations */
