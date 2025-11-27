@@ -2,11 +2,9 @@
 
 *Softly structured. Human, hopeful, and clear. KindNest speaks like a kind, grounded friend who gets things done.*
 
-A warm, community-focused platform where support flows as naturally as love. Built on LISK L2 blockchain with transparency, trust, and human connection at its heart.
+A warm, community-focused platform where support flows as naturally as love. Built on Base L2 blockchain with transparency, trust, and human connection at its heart.
 
 **Together is easier.** ✨
-
-Built for the **Aleph Hackathon - LISK & Web3Bridge Partnership** 🏆
 
 ## 🌟 Features
 ### 💚 **Human-Centered Support**
@@ -63,7 +61,7 @@ KindNest embodies four core personality pillars that guide every design decision
 ### Prerequisites
 - Node.js 18+ and npm
 - MetaMask or compatible wallet
-- ETH on LISK Sepolia Testnet (get from [LISK bridge](https://bridge.lisk.com))
+- ETH on Base Sepolia Testnet (get from [Base faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet))
 
 ### Installation
 
@@ -94,14 +92,14 @@ KindNest embodies four core personality pillars that guide every design decision
    # Edit .env with your private key
    ```
 
-2. **Deploy to LISK Sepolia**
+2. **Deploy to Base Sepolia**
    ```bash
-   npx hardhat run scripts/deploy.js --network liskSepolia
+   npx hardhat run scripts/deploy.js --network baseSepolia
    ```
 
 3. **Verify contracts (optional)**
    ```bash
-   npm run verify <FACTORY_ADDRESS>
+   npx hardhat verify --network baseSepolia <FACTORY_ADDRESS>
    ```
 
 ### Frontend Setup
@@ -129,7 +127,7 @@ KindNest embodies four core personality pillars that guide every design decision
 ### 1. **Connect Your Heart** 💝
 - Open KindNest in your browser
 - Click the beautiful emerald "Connect Wallet" button
-- Ensure you're on LISK Sepolia Testnet (Chain ID: 4202)
+- Ensure you're on Base Sepolia Testnet (Chain ID: 84532)
 - *Your digital wallet is now ready to spread kindness*
 
 ### 2. **Create Your Nest** 🏡
@@ -164,25 +162,28 @@ KindNest embodies four core personality pillars that guide every design decision
 ## 🔧 Configuration
 
 ### Network Configuration
-- **Network**: LISK Sepolia Testnet
-- **Chain ID**: 4202
-- **RPC URL**: https://rpc.sepolia-api.lisk.com
-- **Explorer**: https://sepolia-blockscout.lisk.com
-- **Faucet**: https://bridge.lisk.com
+- **Network**: Base Sepolia Testnet
+- **Chain ID**: 84532
+- **RPC URL**: https://sepolia.base.org
+- **Explorer**: https://sepolia.basescan.org
+- **Faucet**: https://www.coinbase.com/faucets/base-ethereum-goerli-faucet
 
 ### Environment Variables
 
 #### Contracts (.env)
 ```bash
 PRIVATE_KEY=0x... # Your deployment wallet private key
-LISK_RPC_URL=https://rpc.sepolia-api.lisk.com
-ETHERSCAN_API_KEY=abc # For contract verification
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
+BASE_MAINNET_RPC_URL=https://mainnet.base.org
+BASESCAN_API_KEY=... # For contract verification (get from https://basescan.org/myapikey)
 ```
 
 #### Frontend (.env.local)
 ```bash
-NEXT_PUBLIC_LISK_RPC_URL=https://rpc.sepolia-api.lisk.com
-NEXT_PUBLIC_EXPENSE_FACTORY_ADDRESS=0x... # Deployed factory address
+NEXT_PUBLIC_CHAIN_ID=84532
+NEXT_PUBLIC_RPC_URL=https://sepolia.base.org
+NEXT_PUBLIC_EXPLORER_URL=https://sepolia.basescan.org
+NEXT_PUBLIC_CARE_CIRCLE_FACTORY=0x... # Deployed factory address
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=... # Your WalletConnect project ID
 ```
 
@@ -214,7 +215,7 @@ kindnest-mvp/
 │   ├── scripts/
 │   │   └── deploy.js          # Blockchain deployment magic
 │   ├── test/                  # Comprehensive security tests
-│   └── hardhat.config.js      # LISK L2 configuration
+│   └── hardhat.config.js      # Base L2 configuration
 ├── frontend/                  # KindNest web application
 │   ├── app/                   # Next.js app router (pages & layouts)
 │   │   ├── page.tsx           # Landing page with hero section
@@ -240,8 +241,8 @@ kindnest-mvp/
 ## 🌐 Deployment
 
 ### Smart Contracts
-Contracts are deployed on LISK Sepolia Testnet:
-- Explorer: https://sepolia-blockscout.lisk.com
+Contracts are deployed on Base Sepolia Testnet:
+- Explorer: https://sepolia.basescan.org
 
 ### Frontend
 The frontend can be deployed to any static hosting service:
@@ -267,24 +268,10 @@ npm run start # Production server
 
 This project is licensed under the MIT License.
 
-## 🏆 Hackathon Submission
-
-This project was built for the **Aleph Hackathon - LISK & Web3Bridge Partnership** with a focus on:
-- Consumer-facing blockchain applications
-- Smart contract automation
-- Modern Web3 UX
-- Real-world utility
-
-### Demo Video
-[Link to demo video will be added]
-
-### Live Demo
-[KindNest](https://kindnest.vercel.app/)
-
 ## 📞 Support
 
-- **LISK Documentation**: https://docs.lisk.com/
-- **Web3Bridge**: https://web3bridge.com/
+- **Base Documentation**: https://docs.base.org/
+- **Base Network**: https://base.org/
 - **X**: [KindNest X](https://x.com/kindnest_xyz)
 - **Issues**: Create an issue in this repository
 
@@ -313,10 +300,10 @@ KindNest was born from a simple belief: **technology should make human connectio
 
 In a world where sharing expenses often creates awkwardness, KindNest transforms financial transparency into an act of care. Every gradient, every animation, every word is chosen to remind us that behind every wallet address is a human heart.
 
-Built with deep love for the **LISK L2 ecosystem** and a conviction that blockchain's greatest power lies not in its technology, but in its ability to help us trust and support each other.
+Built with deep love for the **Base L2 ecosystem** and a conviction that blockchain's greatest power lies not in its technology, but in its ability to help us trust and support each other.
 
 *Together is easier.* 🌱✨
 
 ---
 
-**Made with 💚 by humans who believe in humans, for the LISK L2 ecosystem**
+**Made with 💚 by humans who believe in humans, for the Base L2 ecosystem**
