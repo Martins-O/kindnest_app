@@ -1560,9 +1560,10 @@ export const GROUP_TREASURY_ABI = [
 ] as const;
 
 // Contract addresses and configuration
+// Note: Update these addresses after deploying to Base
 export const CONTRACT_ADDRESSES = {
-  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x4732bd7fA6D7063Cf88F308DA26Df28A6395Fa0A') as `0x${string}`,
-  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x96D3a232D2A97A94D01eEA63F9f7254974DeD5B8') as `0x${string}`,
+  CARE_CIRCLE_FACTORY: (process.env.NEXT_PUBLIC_CARE_CIRCLE_FACTORY || '0x0000000000000000000000000000000000000000') as `0x${string}`,
+  SAMPLE_GROUP: (process.env.NEXT_PUBLIC_SAMPLE_GROUP || '0x0000000000000000000000000000000000000000') as `0x${string}`,
 } as const
 
 // Check if contracts are deployed
@@ -1570,10 +1571,10 @@ export const ARE_CONTRACTS_DEPLOYED = CONTRACT_ADDRESSES.CARE_CIRCLE_FACTORY !==
 
 // Network configuration
 export const NETWORK_CONFIG = {
-  chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '4202'),
-  name: 'LISK',
-  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia-blockscout.lisk.com',
-  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia-api.lisk.com',
+  chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '84532'),
+  name: 'Base',
+  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia.basescan.org',
+  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://sepolia.base.org',
 } as const
 
 // Contract interaction helpers
