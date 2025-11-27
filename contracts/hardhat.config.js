@@ -17,42 +17,40 @@ module.exports = {
     hardhat: {
       chainId: 31337
     },
-    // LISK Networks
-    liskSepolia: {
-      url: "https://rpc.sepolia-api.lisk.com",
+    // Base Networks
+    baseSepolia: {
+      url: "https://sepolia.base.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 4202,
+      chainId: 84532,
       gasPrice: 1000000000, // 1 gwei
-      blockGasLimit: 30000000,
     },
-    liskMainnet: {
-      url: "https://rpc.api.lisk.com", 
+    baseMainnet: {
+      url: "https://mainnet.base.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 1135,
+      chainId: 8453,
       gasPrice: 1000000000,
-      blockGasLimit: 30000000,
     }
   },
   etherscan: {
     apiKey: {
-      liskSepolia: "abc",
-      liskMainnet: "abc"
+      baseSepolia: process.env.BASESCAN_API_KEY || "",
+      baseMainnet: process.env.BASESCAN_API_KEY || ""
     },
     customChains: [
       {
-        network: "liskSepolia",
-        chainId: 4202,
+        network: "baseSepolia",
+        chainId: 84532,
         urls: {
-          apiURL: "https://sepolia-blockscout.lisk.com/api",
-          browserURL: "https://sepolia-blockscout.lisk.com"
+          apiURL: "https://api-sepolia.basescan.org/api",
+          browserURL: "https://sepolia.basescan.org"
         }
       },
       {
-        network: "liskMainnet", 
-        chainId: 1135,
+        network: "baseMainnet",
+        chainId: 8453,
         urls: {
-          apiURL: "https://blockscout.lisk.com/api",
-          browserURL: "https://blockscout.lisk.com"
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org"
         }
       }
     ]

@@ -23,8 +23,8 @@ const GROUP_TREASURY_ABI = [
 
 class BlockchainSyncService {
   constructor() {
-    this.provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL || 'https://rpc.sepolia-api.lisk.com');
-    this.factoryAddress = process.env.EXPENSE_FACTORY_ADDRESS || '0x4732bd7fA6D7063Cf88F308DA26Df28A6395Fa0A';
+    this.provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL || 'https://sepolia.base.org');
+    this.factoryAddress = process.env.EXPENSE_FACTORY_ADDRESS || '0x0000000000000000000000000000000000000000';
     this.factoryContract = new ethers.Contract(this.factoryAddress, EXPENSE_FACTORY_ABI, this.provider);
     this.lastProcessedBlock = null;
     this.isRunning = false;
