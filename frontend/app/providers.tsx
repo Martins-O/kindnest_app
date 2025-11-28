@@ -6,33 +6,56 @@ import { createAppKit } from '@reown/appkit/react'
 import { WagmiProvider } from 'wagmi';
 import { wagmiAdapter, projectId, networks } from '@/lib/wagmi';
 import { AAWalletProvider } from '@/components/auth/AAWalletProvider';
+import {
+  metadata,
+  features,
+  themeMode,
+  themeVariables,
+  chainImages
+} from '@/lib/appkit-config';
 
 // Create Reown AppKit modal
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
   networks,
-  metadata: {
-    name: 'KindNest',
-    description: 'Community expense sharing platform - Together is easier',
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://kindnest.app',
-    icons: ['https://kindnest.app/icon.png']
-  },
+  metadata,
   features: {
-    analytics: true,
+    ...features,
+    // Enable all social login providers
+    socials: ['google', 'github', 'apple', 'discord', 'x', 'farcaster'],
+    // Enable email with wallet display
     email: true,
-    socials: ['google', 'github', 'apple', 'discord'],
     emailShowWallets: true,
+    // Enable analytics for tracking
+    analytics: true,
+    // Disable swaps and onramp for now
+    swaps: false,
+    onramp: false,
   },
-  themeMode: 'dark',
+  themeMode,
   themeVariables: {
-    '--w3m-font-family': 'Inter, system-ui, sans-serif',
-    '--w3m-accent': '#10b981', // emerald-500
-    '--w3m-color-mix': '#10b981',
-    '--w3m-color-mix-strength': 20,
-    '--w3m-border-radius-master': '8px',
-    '--w3m-font-size-master': '14px',
-  }
+    ...themeVariables,
+    // Additional custom styling
+    '--w3m-z-index': '1000',
+  },
+  // Enable wallet features
+  enableWalletConnect: true,
+  enableInjected: true,
+  enableCoinbase: true,
+  // Chain-specific images
+  chainImages,
+  // Featured wallets (shown first in list)
+  featuredWalletIds: [
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // Coinbase Wallet
+    '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', // Rainbow
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+  ],
+  // Include all available wallets
+  includeWalletIds: 'ALL',
+  // Show all wallets option
+  allWallets: 'SHOW',
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -40,6 +63,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000, // 1 minute
+        retry: 3,
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      },
+      mutations: {
+        retry: 1,
       },
     },
   }));
