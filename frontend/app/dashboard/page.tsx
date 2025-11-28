@@ -7,10 +7,11 @@ import { useKindNestWallet } from '@/hooks/useKindNestWallet';
 import { useAppKitIntegration } from '@/hooks/useAppKitIntegration';
 import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf, Copy, Compass, Search } from 'lucide-react';
-import { AppKitButton } from '@/components/ui/AppKitButton';
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
 import { useUserGroups, useUserGroupsWithEventListener, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
 import { groupSync } from '@/lib/groupSync';
 import { Button } from '@/components/ui/Button';
+import { AppKitButton, NetworkButton } from '@/components/ui/AppKitButton';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { apiClient } from '@/lib/api';
@@ -220,9 +221,9 @@ export default function Dashboard() {
         <Card className="p-8 bg-white/5 backdrop-blur-lg border-white/10">
           <CardContent>
             <h2 className="text-2xl font-bold mb-4 text-white">Please connect your wallet</h2>
-            <div className="text-center">
-              <AppKitButton />
-              <p className="text-white/60 text-sm mt-4">
+            <div className="text-center flex flex-col items-center gap-4">
+              <AppKitButton className="px-8 py-3" />
+              <p className="text-white/60 text-sm">
                 Or sign up with email for gasless transactions
               </p>
             </div>
@@ -279,9 +280,12 @@ export default function Dashboard() {
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Refresh
               </Button>
-              {/* Show ConnectButton only for wallet users, show address for email users */}
+              {/* Show AppKit button only for wallet users, show address for email users */}
               {isConnected ? (
-                <AppKitButton />
+                <div className="flex items-center gap-2">
+                  <NetworkButton />
+                  <AppKitButton variant="account-only" />
+                </div>
               ) : isAuthenticated && user?.smartAccountAddress ? (
                 <div className="flex items-center gap-3 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-200 text-green-800 px-4 py-2 rounded-xl shadow-lg">
                   <Wallet className="h-4 w-4" />

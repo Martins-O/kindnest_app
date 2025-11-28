@@ -1,7 +1,7 @@
 'use client';
 
-import { AppKitButton } from '@/components/ui/AppKitButton';
-import { useKindNestWallet } from '@/hooks/useKindNestWallet';
+import { useAppKit } from '@reown/appkit/react';
+import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { WalletSelector } from '@/components/auth/WalletSelector';

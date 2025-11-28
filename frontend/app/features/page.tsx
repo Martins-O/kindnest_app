@@ -1,8 +1,9 @@
 'use client';
 
-import { AppKitButton } from '@/components/ui/AppKitButton';
+import { useAppKit } from '@reown/appkit/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { AppKitButton } from '@/components/ui/AppKitButton';
 import {
   ArrowLeft,
   Users,
@@ -169,7 +170,7 @@ export default function Features() {
               <span className="text-xl font-bold text-slate-800">KindNest</span>
             </div>
           </div>
-          <AppKitButton />
+          <AppKitButton variant="compact" />
         </nav>
 
         {/* Header */}
@@ -286,7 +287,7 @@ export default function Features() {
           </p>
           <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-1 rounded-2xl inline-block">
             <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-              <AppKitButton />
+              <AppKitButton className="px-8 py-3" />
             </div>
           </div>
         </div>

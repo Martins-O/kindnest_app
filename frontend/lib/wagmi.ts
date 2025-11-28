@@ -1,18 +1,25 @@
-import { http, createConfig } from 'wagmi'
+import { cookieStorage, createStorage, http } from 'wagmi'
 import { base, baseSepolia } from 'wagmi/chains'
-import { coinbaseWallet, metaMask, walletConnect } from 'wagmi/connectors'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 
-export const config = createConfig({
-  chains: [baseSepolia, base], // Testnet first for development
-  connectors: [
-    // metaMask(),
-    coinbaseWallet({ appName: 'KindNest - Community Care Platform' }),
-  ],
-  transports: {
-    [baseSepolia.id]: http(),
-    [base.id]: http(),
-  },
+// Get projectId from environment
+export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
+
+if (!projectId) {
+  console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set')
+}
+
+// Define networks
+export const networks = [baseSepolia, base] as const
+
+// Create Wagmi Adapter for Reown AppKit
+export const wagmiAdapter = new WagmiAdapter({
+  networks,
+  projectId,
+  ssr: true,
 })
+
+export const config = wagmiAdapter.wagmiConfig
 
 // Export chain configs for use throughout app
 export { base, baseSepolia }

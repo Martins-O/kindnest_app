@@ -20,8 +20,11 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${address.slice(0, 2 + chars)}...${address.slice(-chars)}`;
 }
 
-// Alias for consistency with AppKit components
-export const formatAddress = shortenAddress;
+// Alias for consistency
+export function formatAddress(address: string, chars = 4): string {
+  return shortenAddress(address, chars);
+}
+
 
 export function formatDate(timestamp: bigint): string {
   const date = new Date(Number(timestamp) * 1000);
