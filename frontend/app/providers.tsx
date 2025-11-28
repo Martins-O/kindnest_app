@@ -2,87 +2,81 @@
 
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createAppKit } from '@reown/appkit/react'
 import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
-import { merge } from 'lodash';
-import { config } from '@/lib/wagmi';
+import { wagmiAdapter, projectId, networks } from '@/lib/wagmi';
 import { AAWalletProvider } from '@/components/auth/AAWalletProvider';
+import {
+  metadata,
+  features,
+  themeMode,
+  themeVariables,
+  chainImages
+} from '@/lib/appkit-config';
 
-import '@rainbow-me/rainbowkit/styles.css';
-
-// Custom KindNest theme for RainbowKit
-const kindNestTheme = merge({
-  blurs: {
-    modalOverlay: 'blur(6px)',
+// Create Reown AppKit modal with advanced configuration
+const modal = createAppKit({
+  adapters: [wagmiAdapter],
+  projectId,
+  networks,
+  metadata,
+  features: {
+    ...features,
+    // Enable all social login providers
+    socials: ['google', 'github', 'apple', 'discord', 'x', 'farcaster'],
+    // Enable email with wallet display
+    email: true,
+    emailShowWallets: true,
+    // Enable analytics for tracking
+    analytics: true,
+    // Disable swaps and onramp for now
+    swaps: false,
+    onramp: false,
   },
-  colors: {
-    accentColor: '#10b981', // emerald-500
-    accentColorForeground: '#ffffff',
-    actionButtonBorder: 'rgba(16, 185, 129, 0.2)',
-    actionButtonBorderMobile: 'rgba(16, 185, 129, 0.2)',
-    actionButtonSecondaryBackground: 'rgba(16, 185, 129, 0.1)',
-    closeButton: 'rgba(255, 255, 255, 0.8)',
-    closeButtonBackground: 'rgba(0, 0, 0, 0.2)',
-    connectButtonBackground: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)',
-    connectButtonBackgroundError: '#ef4444',
-    connectButtonInnerBackground: 'rgba(0, 0, 0, 0.5)',
-    connectButtonText: '#ffffff',
-    connectButtonTextError: '#ffffff',
-    connectionIndicator: '#10b981',
-    downloadBottomCardBackground: 'rgba(0, 0, 0, 0.8)',
-    downloadTopCardBackground: 'rgba(0, 0, 0, 0.9)',
-    error: '#ef4444',
-    generalBorder: 'rgba(255, 255, 255, 0.1)',
-    generalBorderDim: 'rgba(255, 255, 255, 0.05)',
-    menuItemBackground: 'rgba(16, 185, 129, 0.1)',
-    modalBackdrop: 'rgba(0, 0, 0, 0.8)',
-    modalBackground: 'rgba(15, 23, 42, 0.95)',
-    modalBorder: 'rgba(255, 255, 255, 0.1)',
-    modalText: '#ffffff',
-    modalTextDim: 'rgba(255, 255, 255, 0.7)',
-    modalTextSecondary: 'rgba(255, 255, 255, 0.8)',
-    profileAction: 'rgba(16, 185, 129, 0.1)',
-    profileActionHover: 'rgba(16, 185, 129, 0.2)',
-    profileForeground: 'rgba(15, 23, 42, 0.95)',
-    selectedOptionBorder: 'rgba(16, 185, 129, 0.3)',
-    standby: 'rgba(255, 255, 255, 0.5)',
+  themeMode,
+  themeVariables: {
+    ...themeVariables,
+    // Additional custom styling
+    '--w3m-z-index': '1000',
   },
-  fonts: {
-    body: 'Inter, system-ui, sans-serif',
-  },
-  radii: {
-    actionButton: '16px',
-    connectButton: '12px',
-    menuButton: '12px',
-    modal: '24px',
-    modalMobile: '20px',
-  },
-  shadows: {
-    connectButton: '0 4px 20px rgba(16, 185, 129, 0.3)',
-    dialog: '0 25px 50px rgba(0, 0, 0, 0.5)',
-    profileDetailsAction: '0 2px 8px rgba(0, 0, 0, 0.1)',
-    selectedOption: '0 4px 16px rgba(16, 185, 129, 0.2)',
-    selectedWallet: '0 4px 16px rgba(16, 185, 129, 0.2)',
-    walletLogo: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  },
-} as Theme);
+  // Enable wallet features
+  enableWalletConnect: true,
+  enableInjected: true,
+  enableCoinbase: true,
+  // Chain-specific images
+  chainImages,
+  // Featured wallets (shown first in list)
+  featuredWalletIds: [
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // Coinbase Wallet
+    '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', // Rainbow
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+  ],
+  // Include all available wallets
+  includeWalletIds: 'ALL',
+  // Show all wallets option
+  allWallets: 'SHOW',
+});
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(() => new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000, // 1 minute
+        retry: 3,
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      },
+      mutations: {
+        retry: 1,
       },
     },
   }));
 
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <AAWalletProvider>
-          <RainbowKitProvider theme={kindNestTheme} showRecentTransactions={true}>
-            {children}
-          </RainbowKitProvider>
+          {children}
         </AAWalletProvider>
       </QueryClientProvider>
     </WagmiProvider>
