@@ -49,11 +49,11 @@ KindNest embodies four core personality pillars that guide every design decision
 
 ### Frontend
 - **Next.js 15** with React 19 for modern, fast interactions
-- **TypeScript** for type safety and developer confidence  
+- **TypeScript** for type safety and developer confidence
 - **Tailwind CSS** with custom KindNest design system
-- **Custom RainbowKit Theme** seamlessly integrated with emerald/teal branding
-- **wagmi v2** and **RainbowKit** for smooth Web3 experiences
-- **Viem** for reliable Ethereum interactions
+- **Reown AppKit** with social logins (Google, Apple, GitHub, Discord) and email authentication
+- **wagmi v2** and **Viem** for robust Web3 experiences
+- **WalletConnect v2** for seamless wallet connections
 - **Human-Centered Animations** with CSS transforms and keyframes
 
 ## 🚀 Quick Start
@@ -184,7 +184,7 @@ NEXT_PUBLIC_CHAIN_ID=84532
 NEXT_PUBLIC_RPC_URL=https://sepolia.base.org
 NEXT_PUBLIC_EXPLORER_URL=https://sepolia.basescan.org
 NEXT_PUBLIC_CARE_CIRCLE_FACTORY=0x... # Deployed factory address
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=... # Your WalletConnect project ID
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=... # Get from https://cloud.reown.com
 ```
 
 ## 🧪 Testing

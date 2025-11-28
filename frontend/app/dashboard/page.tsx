@@ -1,12 +1,13 @@
 'use client';
 
-import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCustomAuth } from '@/hooks/useCustomAuth';
+import { useKindNestWallet } from '@/hooks/useKindNestWallet';
+import { useAppKitIntegration } from '@/hooks/useAppKitIntegration';
 import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf, Copy, Compass, Search } from 'lucide-react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { AppKitButton } from '@/components/ui/AppKitButton';
 import { useUserGroups, useUserGroupsWithEventListener, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
 import { groupSync } from '@/lib/groupSync';
 import { Button } from '@/components/ui/Button';
@@ -21,7 +22,11 @@ import { GroupTemplateSelector } from '@/components/GroupTemplateSelector';
 import { TemplateGroupCreator } from '@/components/TemplateGroupCreator';
 
 export default function Dashboard() {
-  const { address, isConnected } = useAccount();
+  // Use optimized AppKit hooks
+  const { address, isConnected } = useKindNestWallet();
+  // Initialize AppKit integration for events
+  useAppKitIntegration();
+
   const { isAuthenticated, loading, user } = useCustomAuth();
   const { smartAccountAddress } = useAAWalletContext();
   const router = useRouter();
@@ -95,7 +100,7 @@ export default function Dashboard() {
     if (address && refetchGroups) {
       // Setting up dashboard sync
       groupSync.onDashboardChange(refetchGroups);
-      
+
       return () => {
         // Cleaning up dashboard sync
         groupSync.removeListener('dashboard-refresh');
@@ -106,14 +111,14 @@ export default function Dashboard() {
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!groupName.trim() || !nickname.trim()) return;
-    
+
     try {
       // Parse minimum contribution to wei (assuming input is in ETH)
       const minContributionWei = parseFloat(minimumContribution) * 1e18;
-      
+
       // Create blockchain group first with all parameters
       createGroup(
-        groupName.trim(), 
+        groupName.trim(),
         nickname.trim(),
         description.trim(),
         category,
@@ -122,7 +127,7 @@ export default function Dashboard() {
         Math.floor(minContributionWei),
         contributionFrequency
       );
-      
+
       // Note: We'll save to database after blockchain transaction succeeds
       // This is handled in the success useEffect above via API call
     } catch (error) {
@@ -133,7 +138,7 @@ export default function Dashboard() {
   // Create database entry after blockchain success
   const saveToDatabaseAfterBlockchainSuccess = async () => {
     if (!userAddress || !groupName) return;
-    
+
     try {
       const groupData = {
         name: groupName.trim(),
@@ -165,7 +170,7 @@ export default function Dashboard() {
           status: 'active'
         }]
       };
-      
+
       await apiClient.createGroup(groupData);
     } catch (error) {
       console.error('Error saving group to database:', error);
@@ -188,7 +193,7 @@ export default function Dashboard() {
 
     // Create group with template data
     createGroup(
-      groupData.name, 
+      groupData.name,
       groupData.creatorNickname,
       templateDescription,
       templateCategory,
@@ -216,7 +221,7 @@ export default function Dashboard() {
           <CardContent>
             <h2 className="text-2xl font-bold mb-4 text-white">Please connect your wallet</h2>
             <div className="text-center">
-              <ConnectButton />
+              <AppKitButton />
               <p className="text-white/60 text-sm mt-4">
                 Or sign up with email for gasless transactions
               </p>
@@ -276,7 +281,7 @@ export default function Dashboard() {
               </Button>
               {/* Show ConnectButton only for wallet users, show address for email users */}
               {isConnected ? (
-                <ConnectButton />
+                <AppKitButton />
               ) : isAuthenticated && user?.smartAccountAddress ? (
                 <div className="flex items-center gap-3 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-200 text-green-800 px-4 py-2 rounded-xl shadow-lg">
                   <Wallet className="h-4 w-4" />
@@ -503,7 +508,7 @@ export default function Dashboard() {
               {/* Additional Information */}
               <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
                 <h3 className="text-xl font-bold text-slate-800 mb-4">Additional Information</h3>
-                
+
                 {/* Location */}
                 <div className="mb-6">
                   <label className="block text-sm font-bold mb-3 text-slate-700">Location (Optional)</label>
@@ -574,17 +579,17 @@ export default function Dashboard() {
               {/* Action Buttons */}
               <div className="bg-gradient-to-r from-slate-100 to-blue-100 rounded-2xl p-6">
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     loading={isPending || isConfirming}
                     disabled={!groupName.trim() || !nickname.trim()}
                     className="flex-1 kindnest-button text-lg py-4"
                   >
                     {isPending ? 'Creating Circle...' : isConfirming ? 'Confirming Transaction...' : 'Create Your Support Circle'}
                   </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => {
                       setShowCreateGroup(false);
                       resetForm();
@@ -608,7 +613,7 @@ export default function Dashboard() {
           {!showCreateGroup && !showTemplateSelector && !selectedTemplate && (
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               {/* Template-based Creation */}
-              <div 
+              <div
                 className="group-card p-12 cursor-pointer"
                 onClick={() => setShowTemplateSelector(true)}
               >
@@ -633,7 +638,7 @@ export default function Dashboard() {
               </div>
 
               {/* Custom Creation */}
-              <div 
+              <div
                 className="group-card p-12 cursor-pointer"
                 onClick={() => setShowCreateGroup(true)}
               >
@@ -670,8 +675,8 @@ export default function Dashboard() {
               </p>
               <div className="flex justify-center gap-2 mt-8">
                 <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           ) : userGroupAddresses && userGroupAddresses.length > 0 ? (
@@ -682,7 +687,7 @@ export default function Dashboard() {
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {userGroupAddresses.map((groupAddress) => (
-                  <GroupCard 
+                  <GroupCard
                     key={groupAddress}
                     groupAddress={groupAddress}
                     userAddress={userAddress}
@@ -700,7 +705,7 @@ export default function Dashboard() {
               <p className="text-slate-600 text-lg mb-8 max-w-md mx-auto">
                 Ready to build your first community? Create a support circle to connect with people who care.
               </p>
-              <Button 
+              <Button
                 onClick={() => setShowCreateGroup(true)}
                 className="kindnest-button text-lg px-8 py-4"
               >
@@ -711,7 +716,7 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-      
+
       {/* Network Debug Component */}
       <NetworkTest />
     </div>
@@ -719,12 +724,12 @@ export default function Dashboard() {
 }
 
 // Separate component to fetch and display group info
-function GroupCard({ 
-  groupAddress, 
-  userAddress, 
-  onGroupClick 
-}: { 
-  groupAddress: string; 
+function GroupCard({
+  groupAddress,
+  userAddress,
+  onGroupClick
+}: {
+  groupAddress: string;
   userAddress?: string;
   onGroupClick: (address: string) => void;
 }) {
@@ -762,7 +767,7 @@ function GroupCard({
   }
 
   return (
-    <div 
+    <div
       className="group-card p-6 cursor-pointer"
       onClick={() => onGroupClick(groupAddress)}
     >
@@ -786,7 +791,7 @@ function GroupCard({
             <Receipt className="h-4 w-4" />
             <span>Created {formatDate(groupInfo.createdAt)}</span>
           </div>
-          
+
           {/* Member Status */}
           {groupInfo.creator === userAddress ? (
             <div className="flex items-center gap-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 px-3 py-2 rounded-xl text-sm font-semibold">
@@ -804,7 +809,7 @@ function GroupCard({
               <span>Not a member</span>
             </div>
           )}
-          
+
           {/* Balance Display */}
           {isMember && balance !== undefined && (
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 border border-purple-200">

@@ -1,16 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { useConnect, useAccount } from 'wagmi'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Wallet } from 'lucide-react'
 import { EmailSignup } from './EmailSignup'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useKindNestWallet } from '@/hooks/useKindNestWallet'
 
 export function WalletSelector() {
   const [showEmailSignup, setShowEmailSignup] = useState(false)
-  const { connect, connectors, isPending } = useConnect()
-  const { isConnected } = useAccount()
+  const { isConnected, open } = useKindNestWallet()
 
   if (isConnected) {
     return null // User already connected
@@ -19,8 +17,8 @@ export function WalletSelector() {
   if (showEmailSignup) {
     return (
       <div className="w-full max-w-sm mx-auto space-y-4">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setShowEmailSignup(false)}
           className="mb-4 border-white/30 text-white hover:bg-white/10 hover:border-white/40"
         >
@@ -69,19 +67,16 @@ export function WalletSelector() {
         </div>
       </div>
 
-      {/* Traditional Wallet Options */}
+      {/* Traditional Wallet Options - AppKit Modal */}
       <div className="space-y-2">
-        {connectors.map((connector) => (
-          <Button
-            key={connector.id}
-            onClick={() => connect({ connector })}
-            disabled={isPending}
-            variant="outline"
-            className="w-full border-white/30 text-white hover:bg-white/10 hover:border-white/40 py-3 font-medium"
-          >
-            {connector.name}
-          </Button>
-        ))}
+        <Button
+          onClick={() => open()}
+          variant="outline"
+          className="w-full border-white/30 text-white hover:bg-white/10 hover:border-white/40 py-3 font-medium flex items-center justify-center gap-2"
+        >
+          <Wallet className="h-5 w-5" />
+          <span>Connect External Wallet</span>
+        </Button>
       </div>
     </div>
   )
