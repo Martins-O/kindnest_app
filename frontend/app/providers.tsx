@@ -14,7 +14,7 @@ import {
   chainImages
 } from '@/lib/appkit-config';
 
-// Create Reown AppKit modal with advanced configuration
+// Create Reown AppKit modal
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
