@@ -1,12 +1,13 @@
 import { baseSepolia, base } from 'wagmi/chains'
+import type { AppKitNetwork } from '@reown/appkit/networks'
 
 // AppKit Configuration Constants
 export const APPKIT_CONFIG = {
     // Project metadata
     projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
 
-    // Supported networks
-    networks: [baseSepolia, base],
+    // Supported networks (explicitly typed for AppKit)
+    networks: [baseSepolia, base] as [AppKitNetwork, ...AppKitNetwork[]],
 
     // Default network
     defaultNetwork: baseSepolia,

@@ -1,9 +1,10 @@
 'use client';
 
-import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCustomAuth } from '@/hooks/useCustomAuth';
+import { useKindNestWallet } from '@/hooks/useKindNestWallet';
+import { useAppKitIntegration } from '@/hooks/useAppKitIntegration';
 import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf, Copy, Compass, Search } from 'lucide-react';
 import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
@@ -22,7 +23,11 @@ import { GroupTemplateSelector } from '@/components/GroupTemplateSelector';
 import { TemplateGroupCreator } from '@/components/TemplateGroupCreator';
 
 export default function Dashboard() {
-  const { address, isConnected } = useAccount();
+  // Use optimized AppKit hooks
+  const { address, isConnected } = useKindNestWallet();
+  // Initialize AppKit integration for events
+  useAppKitIntegration();
+
   const { isAuthenticated, loading, user } = useCustomAuth();
   const { smartAccountAddress } = useAAWalletContext();
   const router = useRouter();

@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react';
 import { WalletSelector } from '@/components/auth/WalletSelector';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { useAAWalletContext } from '@/components/auth/AAWalletProvider';
-import { 
-  Heart, 
-  Users, 
-  Shield, 
-  Zap, 
-  ArrowRight, 
+import {
+  Heart,
+  Users,
+  Shield,
+  Zap,
+  ArrowRight,
   Sparkles,
   TrendingUp,
   Globe,
@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 export default function Home() {
-  const { isConnected } = useAccount();
+  const { isConnected } = useKindNestWallet();
   const { isAuthenticated } = useSupabaseAuth();
   const { smartAccountAddress } = useAAWalletContext();
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function Home() {
     {
       icon: Shield,
       title: "Safe & Transparent",
-      description: "Every contribution is secured by smart contracts. Trust built into every transaction.", 
+      description: "Every contribution is secured by smart contracts. Trust built into every transaction.",
       color: "from-blue-500 to-indigo-500"
     },
     {
@@ -88,7 +88,7 @@ export default function Home() {
 
   const benefits = [
     "Support a friend through tough times",
-    "Share costs for family gatherings", 
+    "Share costs for family gatherings",
     "Fund community projects together",
     "Help with medical expenses",
     "Support someone's dreams",
@@ -101,8 +101,8 @@ export default function Home() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -inset-10 opacity-20">
           <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-40 w-96 h-96 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-          <div className="absolute bottom-20 left-40 w-96 h-96 bg-gradient-to-r from-teal-400 to-green-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-40 right-40 w-96 h-96 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-40 w-96 h-96 bg-gradient-to-r from-teal-400 to-green-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
       </div>
 
@@ -119,19 +119,19 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-6 text-white/80">
-            <button 
+            <button
               onClick={() => router.push('/features')}
               className="hover:text-emerald-300 cursor-pointer transition-all duration-200 font-semibold px-4 py-2 rounded-xl hover:bg-white/10"
             >
               Features
             </button>
-            <button 
+            <button
               onClick={() => router.push('/how-it-works')}
               className="hover:text-emerald-300 cursor-pointer transition-all duration-200 font-semibold px-4 py-2 rounded-xl hover:bg-white/10"
             >
               How it Works
             </button>
-            <button 
+            <button
               onClick={() => router.push('/about')}
               className="hover:text-emerald-300 cursor-pointer transition-all duration-200 font-semibold px-4 py-2 rounded-xl hover:bg-white/10"
             >
@@ -141,14 +141,14 @@ export default function Home() {
         </nav>
 
         {/* Hero Section */}
-        <div className={`py-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`py - 16 transition - all duration - 1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} `}>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <div className="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20 shadow-lg">
                 <Sparkles className="h-5 w-5 text-emerald-300 mr-3 animate-pulse" />
                 <span className="text-white font-bold text-sm">Web3 Mutual Aid Platform</span>
               </div>
-              
+
               <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tight">
                 <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">
                   Support
@@ -157,9 +157,9 @@ export default function Home() {
                   Made Simple
                 </span>
               </h1>
-              
+
               <p className="text-xl sm:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed">
-                Create support circles that matter. Share costs, spread kindness, and 
+                Create support circles that matter. Share costs, spread kindness, and
                 <span className="bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent font-bold"> build community</span> together.
               </p>
 
@@ -172,7 +172,7 @@ export default function Home() {
                   </div>
                   <WalletSelector />
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row items-center gap-8 text-sm text-slate-500">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-pulse shadow-lg"></div>
@@ -215,7 +215,7 @@ export default function Home() {
                 <h2 className="text-3xl font-bold text-slate-800 mb-3">Why Choose KindNest?</h2>
                 <p className="text-slate-600 text-lg">Discover what makes support feel human</p>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-10 items-center">
                 <div className="space-y-6">
                   <div className="inline-flex items-center bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full px-4 py-2">
@@ -223,8 +223,8 @@ export default function Home() {
                   </div>
                   <h3 className="text-4xl font-black text-slate-800">{features[activeFeature].title}</h3>
                   <p className="text-slate-600 text-xl leading-relaxed">{features[activeFeature].description}</p>
-                  
-                  <button 
+
+                  <button
                     onClick={() => router.push('/how-it-works')}
                     className="inline-flex items-center space-x-3 text-indigo-600 hover:text-indigo-700 transition-all group bg-indigo-50 hover:bg-indigo-100 rounded-2xl px-6 py-3 font-semibold"
                   >
@@ -232,8 +232,8 @@ export default function Home() {
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
-                
-                <div className={`relative w-full h-80 bg-gradient-to-br ${features[activeFeature].color} rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden`}>
+
+                <div className={`relative w - full h - 80 bg - gradient - to - br ${features[activeFeature].color} rounded - 3xl flex items - center justify - center shadow - 2xl overflow - hidden`}>
                   {(() => {
                     const Icon = features[activeFeature].icon;
                     return <Icon className="h-32 w-32 text-white/90 animate-pulse" />;
@@ -241,16 +241,15 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
                 </div>
               </div>
-              
+
               {/* Feature indicators */}
               <div className="flex justify-center mt-8 space-x-3">
                 {features.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveFeature(index)}
-                    className={`h-4 rounded-full transition-all duration-300 ${
-                      index === activeFeature ? 'bg-indigo-500 w-12' : 'bg-slate-300 hover:bg-slate-400 w-4'
-                    }`}
+                    className={`h - 4 rounded - full transition - all duration - 300 ${index === activeFeature ? 'bg-indigo-500 w-12' : 'bg-slate-300 hover:bg-slate-400 w-4'
+                      } `}
                   />
                 ))}
               </div>
@@ -275,12 +274,12 @@ export default function Home() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={index}
-                  className={`group relative bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-slate-200 hover:border-indigo-300 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} shadow-lg`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  className={`group relative bg - white / 95 backdrop - blur - sm rounded - 3xl p - 8 border border - slate - 200 hover: border - indigo - 300 transition - all duration - 300 hover: scale - [1.02] hover: shadow - xl ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} shadow - lg`}
+                  style={{ transitionDelay: `${index * 100} ms` }}
                 >
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                  <div className={`w - 16 h - 16 bg - gradient - to - br ${feature.color} rounded - 2xl flex items - center justify - center mb - 6 group - hover: scale - 110 transition - transform shadow - lg`}>
                     <Icon className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 mb-3">{feature.title}</h3>
@@ -303,7 +302,7 @@ export default function Home() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
             {benefits.map((benefit, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex items-start space-x-4 bg-gradient-to-br from-white/90 to-slate-50/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-indigo-300"
               >
@@ -336,7 +335,7 @@ export default function Home() {
                 color: "from-blue-500 to-indigo-500"
               },
               {
-                step: "02", 
+                step: "02",
                 title: "Create Your Circle",
                 description: "Start a support group and invite people who matter to you",
                 icon: Users,
@@ -353,7 +352,7 @@ export default function Home() {
               const Icon = step.icon;
               return (
                 <div key={index} className="text-center relative bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-slate-200 hover:border-indigo-300 transition-all duration-300 hover:scale-[1.02]">
-                  <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}>
+                  <div className={`w - 20 h - 20 bg - gradient - to - br ${step.color} rounded - 2xl flex items - center justify - center mx - auto mb - 6 shadow - lg`}>
                     <Icon className="h-10 w-10 text-white" />
                   </div>
                   <div className="inline-block bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full px-4 py-2 text-sm font-bold text-indigo-700 mb-4">{step.step}</div>
@@ -377,21 +376,21 @@ export default function Home() {
               <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-8">
                 <Heart className="h-12 w-12 text-white" />
               </div>
-              
+
               <h2 className="text-4xl sm:text-5xl font-black mb-6">
                 Ready to Start Your
                 <span className="block">Support Circle?</span>
               </h2>
-              
+
               <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Join thousands who&apos;ve discovered that caring for each other 
+                Join thousands who&apos;ve discovered that caring for each other
                 is easier when we do it together.
               </p>
-              
+
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-md mx-auto mb-8">
                 <WalletSelector />
               </div>
-              
+
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-white/80">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
