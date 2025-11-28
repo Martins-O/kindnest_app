@@ -3,16 +3,24 @@
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit } from '@reown/appkit/react'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { WagmiProvider } from 'wagmi';
-import { wagmiAdapter, projectId, networks } from '@/lib/wagmi';
 import { AAWalletProvider } from '@/components/auth/AAWalletProvider';
 import {
+  projectId,
+  networks,
   metadata,
   features,
   themeMode,
   themeVariables,
   chainImages
 } from '@/lib/appkit-config';
+
+// Create WagmiAdapter instance
+const wagmiAdapter = new WagmiAdapter({
+  networks,
+  projectId,
+})
 
 // Create Reown AppKit modal with advanced configuration
 const modal = createAppKit({
@@ -39,13 +47,13 @@ const modal = createAppKit({
     // Additional custom styling
     '--w3m-z-index': '1000',
   },
+  chainImages,
   // Enable wallet features
   enableWalletConnect: true,
   enableInjected: true,
   enableCoinbase: true,
-  // Chain-specific images
-  chainImages,
-  // Featured wallets (shown first in list)
+  // Additional wallet configuration
+  allWallets: 'SHOW',
   featuredWalletIds: [
     'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
     'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // Coinbase Wallet
@@ -54,8 +62,6 @@ const modal = createAppKit({
   ],
   // Include all available wallets
   includeWalletIds: 'ALL',
-  // Show all wallets option
-  allWallets: 'SHOW',
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
