@@ -3,13 +3,14 @@
 import { useAppKit } from '@reown/appkit/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  Users, 
-  Shield, 
-  Zap, 
-  TrendingUp, 
-  Globe, 
+import { AppKitButton } from '@/components/ui/AppKitButton';
+import {
+  ArrowLeft,
+  Users,
+  Shield,
+  Zap,
+  TrendingUp,
+  Globe,
   Timer,
   Leaf,
   CheckCircle,
@@ -155,7 +156,7 @@ export default function Features() {
         {/* Navigation */}
         <nav className="flex items-center justify-between py-6">
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               onClick={() => router.push('/')}
               className="flex items-center space-x-2 text-slate-700 hover:text-slate-900 transition-colors font-semibold"
             >
@@ -169,7 +170,7 @@ export default function Features() {
               <span className="text-xl font-bold text-slate-800">KindNest</span>
             </div>
           </div>
-          <ConnectButton />
+          <AppKitButton variant="compact" />
         </nav>
 
         {/* Header */}
@@ -189,7 +190,7 @@ export default function Features() {
             {mainFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className={`bg-white/95 backdrop-blur-lg rounded-3xl p-8 border border-slate-200 shadow-xl hover:border-indigo-300 hover:shadow-2xl transition-all duration-300 hover:scale-105 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                   style={{ transitionDelay: `${index * 100}ms` }}
@@ -220,7 +221,7 @@ export default function Features() {
             {technicalFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 border border-slate-200 shadow-lg hover:border-indigo-300 hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
@@ -245,7 +246,7 @@ export default function Features() {
                 <div className="space-y-3">
                   {[
                     "Complex setup processes",
-                    "High barriers to entry", 
+                    "High barriers to entry",
                     "Expensive transaction fees",
                     "Limited accessibility",
                     "Centralized control systems"
@@ -263,7 +264,7 @@ export default function Features() {
                   {[
                     "Email-first, no barriers",
                     "Gasless for all users",
-                    "Smart account automation", 
+                    "Smart account automation",
                     "Global kindness network",
                     "Human-centered design"
                   ].map((item, idx) => (
@@ -286,7 +287,7 @@ export default function Features() {
           </p>
           <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-1 rounded-2xl inline-block">
             <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-              <w3m-button />
+              <AppKitButton className="px-8 py-3" />
             </div>
           </div>
         </div>
