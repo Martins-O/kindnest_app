@@ -153,19 +153,19 @@ export function NetworkButton({ className = '' }: NetworkButtonProps) {
         }
     }
 
-    const isCorrectNetwork = selectedNetworkId === 84532 || selectedNetworkId === 8453
+    const isCorrectNetwork = Number(selectedNetworkId) === 84532 || Number(selectedNetworkId) === 8453
 
     return (
         <button
             onClick={() => open({ view: 'Networks' })}
             className={`px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105 ${isCorrectNetwork
-                    ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200'
-                    : 'bg-gradient-to-r from-red-100 to-orange-100 text-red-800 border border-red-200 animate-pulse'
+                ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200'
+                : 'bg-gradient-to-r from-red-100 to-orange-100 text-red-800 border border-red-200 animate-pulse'
                 } ${className}`}
         >
             <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${isCorrectNetwork ? 'bg-blue-500' : 'bg-red-500'}`} />
-                <span>{getNetworkName(selectedNetworkId)}</span>
+                <span>{getNetworkName(Number(selectedNetworkId))}</span>
             </div>
         </button>
     )

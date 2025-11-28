@@ -16,6 +16,12 @@ import {
   chainImages
 } from '@/lib/appkit-config';
 
+// Create WagmiAdapter instance
+const wagmiAdapter = new WagmiAdapter({
+  networks,
+  projectId,
+})
+
 // Create Reown AppKit modal
 const modal = createAppKit({
   adapters: [wagmiAdapter],
