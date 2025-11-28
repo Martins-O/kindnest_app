@@ -3,8 +3,9 @@
 import { useAppKit } from '@reown/appkit/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
+import { AppKitButton } from '@/components/ui/AppKitButton';
+import {
+  ArrowLeft,
   ArrowRight,
   Smartphone,
   Users,
@@ -48,7 +49,7 @@ export default function HowItWorks() {
       tips: "Your smart wallet is created behind the scenes - no crypto knowledge needed"
     },
     {
-      step: "02", 
+      step: "02",
       title: "Create Your Support Circle",
       description: "Build a community of care with a meaningful name and purpose that brings people together",
       icon: Users,
@@ -63,7 +64,7 @@ export default function HowItWorks() {
     },
     {
       step: "03",
-      title: "Invite Your People", 
+      title: "Invite Your People",
       description: "Bring in the people who matter most. They can join with just their email too.",
       icon: UserPlus,
       color: "from-green-500 to-emerald-500",
@@ -176,7 +177,7 @@ export default function HowItWorks() {
         {/* Navigation */}
         <nav className="flex items-center justify-between py-6">
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               onClick={() => router.push('/')}
               className="flex items-center space-x-2 text-slate-700 hover:text-slate-900 transition-colors font-semibold"
             >
@@ -190,7 +191,7 @@ export default function HowItWorks() {
               <span className="text-xl font-bold text-slate-800">KindNest</span>
             </div>
           </div>
-          <w3m-button />
+          <AppKitButton variant="compact" />
         </nav>
 
         {/* Header */}
@@ -211,7 +212,7 @@ export default function HowItWorks() {
               const Icon = step.icon;
               const isEven = index % 2 === 0;
               return (
-                <div 
+                <div
                   key={index}
                   className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 lg:gap-16`}
                 >
@@ -259,7 +260,7 @@ export default function HowItWorks() {
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 border border-slate-200 shadow-lg text-center hover:shadow-xl transition-all duration-300"
                 >
@@ -279,7 +280,7 @@ export default function HowItWorks() {
           <h2 className="text-4xl font-black text-slate-800 text-center mb-16">**Frequently Asked Questions**</h2>
           <div className="max-w-4xl mx-auto space-y-6">
             {faqs.map((faq, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300"
               >
@@ -299,7 +300,7 @@ export default function HowItWorks() {
             </p>
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl inline-block">
               <div className="bg-white/90 backdrop-blur-sm rounded-xl px-8 py-4">
-                <w3m-button />
+                <AppKitButton className="px-8 py-3" />
               </div>
             </div>
           </div>
