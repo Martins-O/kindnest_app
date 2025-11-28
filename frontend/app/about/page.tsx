@@ -1,10 +1,10 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { AppKitButton } from '@/components/ui/AppKitButton';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   Leaf,
   Target,
   Zap,
@@ -44,7 +44,7 @@ export default function About() {
       category: "Frontend",
       technologies: [
         "Next.js 15",
-        "React 19", 
+        "React 19",
         "TypeScript",
         "Tailwind CSS",
         "Account Abstraction",
@@ -52,7 +52,7 @@ export default function About() {
       ]
     },
     {
-      category: "Blockchain", 
+      category: "Blockchain",
       technologies: [
         "Solidity ^0.8.20",
         "Hardhat",
@@ -81,7 +81,7 @@ export default function About() {
     },
     {
       icon: Shield,
-      title: "Trust Through Transparency", 
+      title: "Trust Through Transparency",
       description: "Open, verifiable, and secure. Your support flows are protected by smart contracts and community trust."
     },
     {
@@ -111,7 +111,7 @@ export default function About() {
         {/* Navigation */}
         <nav className="flex items-center justify-between py-6">
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               onClick={() => router.push('/')}
               className="flex items-center space-x-2 text-slate-700 hover:text-slate-900 transition-colors font-semibold"
             >
@@ -125,7 +125,7 @@ export default function About() {
               <span className="text-xl font-bold text-slate-800">KindNest</span>
             </div>
           </div>
-          <ConnectButton />
+          <AppKitButton />
         </nav>
 
         {/* Header */}
@@ -149,19 +149,19 @@ export default function About() {
             <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-8 border border-slate-200 shadow-xl">
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-900 text-lg leading-relaxed mb-6 font-bold">
-                  **KindNest grew from a simple realization:** supporting each other shouldn&apos;t feel cold or complicated. 
-                  We saw people struggling with barriers to giving help - complex wallet setups, gas fees, and technical hurdles 
+                  **KindNest grew from a simple realization:** supporting each other shouldn&apos;t feel cold or complicated.
+                  We saw people struggling with barriers to giving help - complex wallet setups, gas fees, and technical hurdles
                   that made kindness harder than it should be.
                 </p>
                 <p className="text-gray-900 text-lg leading-relaxed mb-6 font-bold">
-                  **Built for the Morph Hackathon,** KindNest combines the transparency of blockchain with the warmth of human connection. 
-                  We use account abstraction and email authentication to remove every barrier between intention and action. 
-                  **Every contribution, every act of support, every moment of care** is recorded with the security of 
+                  **Built for the Morph Hackathon,** KindNest combines the transparency of blockchain with the warmth of human connection.
+                  We use account abstraction and email authentication to remove every barrier between intention and action.
+                  **Every contribution, every act of support, every moment of care** is recorded with the security of
                   smart contracts and the gentleness of community.
                 </p>
                 <p className="text-gray-900 text-lg leading-relaxed font-bold">
-                  **Our mission is beautifully simple:** make supporting each other feel as natural as a warm hug. 
-                  With just your email address, you can create circles of care that span the globe. **You&apos;re not alone in this.** 
+                  **Our mission is beautifully simple:** make supporting each other feel as natural as a warm hug.
+                  With just your email address, you can create circles of care that span the globe. **You&apos;re not alone in this.**
                   Together is easier, and every little bit helps.
                 </p>
               </div>
@@ -176,7 +176,7 @@ export default function About() {
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 border border-slate-200 shadow-lg text-center hover:shadow-xl transition-all duration-300"
                 >
@@ -196,7 +196,7 @@ export default function About() {
           <h2 className="text-4xl font-black text-slate-800 text-center mb-12">**Technology Stack**</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {techStack.map((stack, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300"
               >
@@ -221,7 +221,7 @@ export default function About() {
             {teamValues.map((value, index) => {
               const Icon = value.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="bg-white/95 backdrop-blur-lg rounded-2xl p-8 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
@@ -242,8 +242,8 @@ export default function About() {
             <Award className="h-20 w-20 text-amber-600 mx-auto mb-6" />
             <h2 className="text-4xl font-black text-slate-800 mb-6">**Morph Hackathon Project**</h2>
             <p className="text-xl text-gray-900 mb-8 max-w-3xl mx-auto font-bold">
-              **KindNest was lovingly built for the Morph Hackathon.** More than just competing for prizes, 
-              we&apos;re showcasing how blockchain technology can make human connection warmer, not colder. 
+              **KindNest was lovingly built for the Morph Hackathon.** More than just competing for prizes,
+              we&apos;re showcasing how blockchain technology can make human connection warmer, not colder.
               **Every line of code written with intention to serve humanity.**
             </p>
             <div className="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
@@ -269,8 +269,8 @@ export default function About() {
             <Rocket className="h-20 w-20 text-indigo-500 mx-auto mb-8" />
             <h2 className="text-4xl font-black text-slate-800 mb-8">**The Future of Support**</h2>
             <p className="text-xl text-gray-900 leading-relaxed mb-8 font-bold">
-              **We believe the future of support is decentralized, transparent, and accessible to everyone.** 
-              KindNest is just the beginning. We&apos;re building towards a world where support flows as easily 
+              **We believe the future of support is decentralized, transparent, and accessible to everyone.**
+              KindNest is just the beginning. We&apos;re building towards a world where support flows as easily
               as love, where trust is built into every interaction, and where caring knows no boundaries.
             </p>
             <div className="grid sm:grid-cols-3 gap-6 text-center">
@@ -298,12 +298,12 @@ export default function About() {
           <div className="bg-gradient-to-r from-emerald-100 via-teal-100 to-blue-100 backdrop-blur-lg rounded-3xl p-12 border border-emerald-200 shadow-xl max-w-4xl mx-auto">
             <h2 className="text-4xl font-black text-slate-800 mb-6">**Join the Movement**</h2>
             <p className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto font-semibold">
-              **Experience the future of support today.** Connect with just your email and start building 
+              **Experience the future of support today.** Connect with just your email and start building
               circles of care that span the globe.
             </p>
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl inline-block">
               <div className="bg-white/90 backdrop-blur-sm rounded-xl px-8 py-4">
-                <ConnectButton />
+                <AppKitButton />
               </div>
             </div>
           </div>
