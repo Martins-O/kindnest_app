@@ -14,7 +14,7 @@ export const networks = [baseSepolia, base] as const
 
 // Create Wagmi Adapter for Reown AppKit
 export const wagmiAdapter = new WagmiAdapter({
-  networks,
+  networks: networks as any,
   projectId,
   ssr: true,
 })
