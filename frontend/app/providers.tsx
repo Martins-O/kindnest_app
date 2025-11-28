@@ -45,7 +45,7 @@ const modal = createAppKit({
   themeVariables: {
     ...themeVariables,
     // Additional custom styling
-    '--w3m-z-index': '1000',
+    '--w3m-z-index': 1000,
   },
   chainImages,
   // Enable wallet features
