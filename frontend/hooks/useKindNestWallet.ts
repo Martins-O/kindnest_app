@@ -2,7 +2,6 @@ import { useAppKit, useAppKitAccount, useAppKitNetwork, useAppKitProvider } from
 import { useDisconnect } from 'wagmi';
 import { useMemo } from 'react';
 import { formatAddress } from '@/lib/utils';
-import { type Provider } from '@reown/appkit-adapter-wagmi';
 
 export interface KindNestWalletState {
     address: string | undefined;
@@ -11,7 +10,7 @@ export interface KindNestWalletState {
     status: 'connected' | 'disconnected' | 'connecting' | 'reconnecting' | undefined;
     chainId: number | string | undefined;
     chainName: string | undefined;
-    walletProvider: Provider | undefined;
+    walletProvider: any | undefined;
     disconnect: () => void;
     open: (options?: { view: 'Account' | 'Connect' | 'Networks' }) => Promise<void>;
 }
