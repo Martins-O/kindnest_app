@@ -277,11 +277,55 @@ html, body {
   background: rgba(0, 0, 0, 0.4) !important;
 }
 
-[data-rk] .rk-modal-container {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(148, 163, 184, 0.2) !important;
-  border-radius: 24px !important;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+/* Reown AppKit Custom Styling - KindNest Brand */  
+/* Style the web component buttons */
+appkit-button, w3m-button {
+  --w3m-accent: #10b981 !important;
+  --w3m-color-mix: #10b981 !important;
+  --w3m-color-mix-strength: 20 !important;
+  --w3m-border-radius-master: 12px !important;
+  --w3m-font-size-master: 14px !important;
+}
+
+/* Target the button inside the web component */
+appkit-button::part(button), w3m-button::part(button) {
+  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) !important;
+  border: none !important;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3) !important;
+  transition: all 0.3s ease !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+}
+
+appkit-button::part(button):hover, w3m-button::part(button):hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4) !important;
+  background: linear-gradient(135deg, #059669 0%, #0d9488 100%) !important;
+}
+
+/* AppKit Modal Styling */
+appkit-modal, w3m-modal {
+  --w3m-z-index: 1000 !important;
+  --w3m-accent: #10b981 !important;
+  --w3m-background: rgba(255, 255, 255, 0.95) !important;
+  --w3m-color-bg-1: rgba(255, 255, 255, 0.98) !important;
+  --w3m-color-bg-2: rgba(249, 250, 251, 0.98) !important;
+  --w3m-color-bg-3: rgba(243, 244, 246, 0.98) !important;
+  --w3m-color-overlay: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* AppKit Network Button */
+appkit-network-button::part(button) {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+appkit-network-button::part(button):hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3) !important;
 }
 
 /* Enhanced animations */
