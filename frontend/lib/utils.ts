@@ -20,6 +20,12 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${address.slice(0, 2 + chars)}...${address.slice(-chars)}`;
 }
 
+// Alias for consistency
+export function formatAddress(address: string, chars = 4): string {
+  return shortenAddress(address, chars);
+}
+
+
 export function formatDate(timestamp: bigint): string {
   const date = new Date(Number(timestamp) * 1000);
   return date.toLocaleDateString();
@@ -43,7 +49,7 @@ export function getRelativeTime(date: Date | string | number): string {
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
   if (diffDays < 30) return `${diffDays}d ago`;
-  
+
   // For older dates, show the actual date
   return then.toLocaleDateString();
 }
